@@ -1,0 +1,14 @@
+{
+  "name": "AZAMAI · Asociación Zamorana del Amigo Invisible",
+  "short_name": "AZAMAI",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#8a0016",
+  "theme_color": "#8a0016",
+  "lang": "es",
+  "icons": [
+    {"src": "icono-180.png", "sizes": "180x180", "type": "image/png"},
+    {"src": "icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

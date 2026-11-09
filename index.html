@@ -1,0 +1,1311 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AZAMAI</title>
+<meta name="theme-color" content="#8a0016">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AZAMAI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icono-180.png">
+<link rel="icon" href="icono-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#b3001b; --rojo-osc:#5c000e; --verde:#0c7a3a; --verde-osc:#064d24;
+  --oro:#ffcc33; --oro-osc:#b8860b; --rosa:#ff3ea5; --crema:#fff8ec; --tinta:#2b0a0f;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:'Nunito',system-ui,sans-serif; color:var(--tinta); font-size:16px; line-height:1.45;
+  background:#6e0012;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,204,51,.30) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,.18) 0 1.5px, transparent 2.5px),
+    linear-gradient(180deg,#8a0016,#4a000b);
+  background-size:38px 38px,52px 52px,100% 100%;
+  min-height:100vh; overflow-x:hidden;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+a{color:var(--rojo);font-weight:700}
+.envoltura{max-width:720px;margin:0 auto;position:relative;z-index:2}
+
+/* Guirnalda de luces */
+.luces{display:flex;justify-content:space-around;height:30px;position:relative;overflow:hidden;padding-top:env(safe-area-inset-top)}
+.luces::before{content:'';position:absolute;left:-5%;right:-5%;top:calc(env(safe-area-inset-top) - 6px);height:16px;border-bottom:3px solid #0d3b1c;border-radius:0 0 50% 50%/0 0 100% 100%}
+.bombilla{width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;margin-top:12px;background:currentColor;box-shadow:0 0 12px 2px currentColor;animation:parpadeo 1.1s infinite alternate}
+@keyframes parpadeo{from{opacity:1}to{opacity:.2}}
+
+/* Nieve */
+.copo{position:fixed;top:-24px;color:#fff;pointer-events:none;z-index:1;animation:caer linear infinite;opacity:.85;text-shadow:0 0 6px #fff}
+@keyframes caer{to{transform:translateY(112vh) rotate(360deg)}}
+
+/* Cabecera */
+.nav{position:sticky;top:0;z-index:20;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:8px 10px;background:linear-gradient(#0c7a3a,#064d24);border-bottom:4px solid var(--oro);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.nav a{color:#fff7d6;text-decoration:none;font-weight:900;padding:6px 12px;border-radius:999px;font-size:15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,204,51,.5)}
+.nav a.activo{background:var(--oro);color:var(--rojo-osc)}
+.hero{text-align:center;padding:18px 12px 6px;color:#fff3c4}
+.escudo{font-size:44px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,204,51,.8))}
+.titulo{font-family:'Mountains of Christmas',cursive;font-weight:700;font-size:clamp(56px,17vw,104px);margin:0;line-height:.95;
+  background:linear-gradient(100deg,#fff6c2,#ffcc33 30%,#ffffff 45%,#e0a000 60%,#ffeaa0);background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:brillo 3s linear infinite;
+  filter:drop-shadow(0 3px 0 #3d0009) drop-shadow(0 0 14px rgba(255,204,51,.55))}
+@keyframes brillo{to{background-position:-200% 0}}
+.subtitulo{font-family:'Lobster',cursive;font-size:20px;margin:4px 0 0;color:#ffe9a8;text-shadow:0 2px 0 #3d0009}
+.lema{font-style:italic;font-size:14px;opacity:.85;margin:6px 0 0}
+.cinta{display:inline-block;margin:12px auto 0;background:var(--oro);color:var(--rojo-osc);font-weight:900;padding:6px 16px;border-radius:4px;transform:rotate(-1.5deg);box-shadow:0 3px 0 #8a6500;font-size:14px}
+
+/* Tarjetas con borde de bastón de caramelo */
+.tarjeta{margin:18px 12px;padding:18px 16px;border-radius:18px;position:relative;
+  border:7px solid transparent;
+  background-image:linear-gradient(var(--crema),var(--crema)),repeating-linear-gradient(45deg,#d4001f 0 10px,#fff 10px 20px,#0c7a3a 20px 30px,#fff 30px 40px);
+  background-origin:border-box;background-clip:padding-box,border-box;
+  box-shadow:0 8px 0 rgba(0,0,0,.28),0 0 0 3px var(--oro)}
+.tarjeta h2{font-family:'Lobster',cursive;font-weight:400;color:var(--rojo);margin:0 0 10px;font-size:26px;line-height:1.1}
+.tarjeta h2 .adorno{color:var(--oro-osc)}
+.tarjeta h3{font-family:'Lobster',cursive;font-weight:400;color:var(--verde);margin:16px 0 6px;font-size:21px}
+.tarjeta p{margin:8px 0}
+.tarjeta.presi{background-image:linear-gradient(#fff2fa,#fff2fa),repeating-linear-gradient(45deg,#ff3ea5 0 10px,#ffcc33 10px 20px)}
+.tarjeta.prueba{background-image:linear-gradient(#eef6ff,#eef6ff),repeating-linear-gradient(45deg,#1d4ed8 0 10px,#fff 10px 20px)}
+details.tarjeta>summary{list-style:none;cursor:pointer}
+details.tarjeta>summary::-webkit-details-marker{display:none}
+details.tarjeta>summary h2{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0}
+details.tarjeta>summary h2::after{content:'▾';font-family:'Nunito';font-size:18px;color:var(--oro-osc)}
+details.tarjeta[open]>summary h2{margin-bottom:10px}
+details.tarjeta[open]>summary h2::after{content:'▴'}
+.estatutos p{font-family:Georgia,'Times New Roman',serif}
+.estatutos b{color:var(--rojo)}
+
+/* Jerséis horribles con siglas */
+.bola{position:relative;width:78px;height:78px;margin:12px auto 4px;flex:none}
+.bola svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}
+.bola.xl{width:150px;height:150px}
+.bola.s{width:46px;height:46px;margin:0}
+.corona{position:absolute;top:-22px;left:50%;transform:translateX(-50%) rotate(-8deg);font-size:26px;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.bola.xl .corona{top:-38px;font-size:42px}
+.bola.s .corona{top:-14px;font-size:16px}
+
+/* Censo */
+.censo{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.socio{display:block;text-align:center;text-decoration:none;color:var(--tinta);background:#fff;border-radius:14px;padding:4px 4px 10px;border:2px solid #f1d58a;position:relative}
+.socio .n{font-weight:900;display:block;font-size:15px;line-height:1.15}
+.socio .t{font-size:11px;color:#8a5a5a;display:block}
+.cartel{font-family:'Lobster',cursive;font-size:13px;padding:4px 7px;border-radius:4px;transform:rotate(-3deg);display:inline-block;margin-top:6px;line-height:1.1}
+.cartel.pend{background:#ffe600;color:#b3001b;border:2px dashed #b3001b;animation:temblor 2.8s infinite}
+.cartel.ok{background:var(--verde);color:#ffe8a3;border:2px solid var(--oro)}
+.cartel.gris{background:#eee;color:#666;border:1px solid #ccc;transform:none}
+@keyframes temblor{0%,88%,100%{transform:rotate(-3deg)}91%{transform:rotate(3deg)}94%{transform:rotate(-5deg)}97%{transform:rotate(2deg)}}
+
+/* Mensajes */
+.msg{display:flex;gap:10px;padding:12px;border-radius:14px;background:#fff;border:2px solid #f3d27a;margin:10px 0;position:relative}
+.msg .ico{font-size:26px;line-height:1.1;flex:none}
+.msg .cuerpo{flex:1;min-width:0;overflow-wrap:anywhere}
+.msg .fecha{font-size:12px;color:#8a5a5a;margin-top:4px}
+.msg .de{font-size:12px;font-weight:900;color:var(--verde);text-transform:uppercase;letter-spacing:.04em}
+.msg.reproche{background:#fff0f0;border-color:#ff6b6b}
+.msg.reproche.duro{background:#ffe3e3;border:3px solid #d4001f}
+.msg.solemne{background:#fffbe6;border:3px double var(--oro-osc);font-family:Georgia,'Times New Roman',serif}
+.msg.fiesta{background:linear-gradient(135deg,#eaffef,#fffbe0);border-color:var(--verde)}
+.msg.presi{background:#fff0f8;border-color:var(--rosa)}
+.msg.sistema{background:#f4f7ff;border-color:#9db4ff}
+.msg.cambio{background:#fff7e6;border-color:#ffa94d}
+.msg .nuevo{position:absolute;top:-8px;right:10px;background:var(--rosa);color:#fff;font-size:11px;font-weight:900;padding:1px 8px;border-radius:999px}
+.msg .borrar{position:absolute;bottom:6px;right:8px;background:none;border:0;color:#b3001b;font-size:13px;cursor:pointer}
+.vacio{color:#8a5a5a;font-style:italic}
+
+/* Sobre */
+.sobre{text-align:center;padding:16px;border-radius:14px;background:repeating-linear-gradient(-45deg,#fff 0 12px,#ffe9ef 12px 24px);border:3px dashed var(--rojo)}
+.sobre .quien{font-family:'Lobster',cursive;font-size:34px;color:var(--rojo);margin:4px 0}
+
+/* Formularios */
+label{display:block;font-weight:700;margin:10px 0 4px}
+input[type=text],input[type=password],input[type=url],input:not([type]),textarea,select{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:3px solid var(--oro);background:#fff;color:var(--tinta)}
+textarea{min-height:140px;resize:vertical}
+label.check{display:flex;gap:8px;align-items:center;font-weight:400}
+.fila{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.btn{font:inherit;font-weight:900;border:0;border-radius:999px;padding:12px 18px;background:linear-gradient(#ff3b5c,#b3001b);color:#fff;box-shadow:0 4px 0 #5c000e;cursor:pointer;font-size:16px;line-height:1.1}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #5c000e}
+.btn.oro{background:linear-gradient(#ffe48a,#e0a800);color:#5c000e;box-shadow:0 4px 0 #8a6500}
+.btn.verde{background:linear-gradient(#22b35e,#0c7a3a);box-shadow:0 4px 0 #064d24}
+.btn.rosa{background:linear-gradient(#ff7ac4,#e0157f);box-shadow:0 4px 0 #8a0a4d}
+.btn.azul{background:linear-gradient(#5b8cff,#1d4ed8);box-shadow:0 4px 0 #0f2a7a}
+.btn.peq{padding:8px 13px;font-size:14px}
+.btn.grande{font-size:19px;padding:15px 22px;width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.dictando{animation:latido 1s infinite}
+@keyframes latido{50%{transform:scale(1.06)}}
+.enlaces{list-style:none;padding:0;margin:8px 0}
+.enlaces li{display:flex;gap:8px;align-items:center;background:#fff;border:2px solid #f1d58a;border-radius:10px;padding:6px 10px;margin:6px 0;overflow-wrap:anywhere}
+.enlaces li a{flex:1}
+.nota{font-size:13px;color:#7a4a4a}
+.carta{background:#fffef6;border-radius:12px;padding:14px;border:2px solid #e8d49a;font-family:Georgia,'Times New Roman',serif;white-space:pre-wrap;overflow-wrap:anywhere;
+  background-image:repeating-linear-gradient(transparent 0 27px,#f2e3b6 27px 28px)}
+.carta-cab{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.carta-cab b{font-family:'Lobster',cursive;font-size:22px;color:var(--rojo);font-weight:400}
+.pregunta{background:#fff;border:2px solid #c7b2ff;border-radius:14px;padding:12px;margin:10px 0}
+.pregunta .q{font-weight:700}
+.pregunta .r{margin-top:8px;padding:8px 10px;background:#eefbf2;border-radius:10px;border-left:4px solid var(--verde)}
+.pregunta .r.pend{background:#fff4e0;border-left-color:#ff9800;font-style:italic}
+
+/* Instalar */
+.pasos{counter-reset:p;list-style:none;padding:0}
+.pasos li{counter-increment:p;position:relative;padding:8px 0 8px 46px;margin:6px 0}
+.pasos li::before{content:counter(p);position:absolute;left:0;top:6px;width:34px;height:34px;border-radius:50%;background:var(--rojo);color:#fff;font-weight:900;display:grid;place-items:center;border:2px solid var(--oro)}
+.aviso-instalar{margin:12px;padding:10px 14px;background:var(--oro);border-radius:12px;color:var(--rojo-osc);font-weight:700;display:flex;gap:10px;align-items:center;justify-content:space-between;box-shadow:0 4px 0 #8a6500}
+.aviso-instalar a{color:var(--rojo-osc)}
+
+/* Capas */
+.capa{position:fixed;inset:0;background:rgba(30,0,6,.72);z-index:50;display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.capa .tarjeta{width:100%;max-width:680px;max-height:86vh;overflow:auto;margin:0}
+.ocupado{position:fixed;inset:0;z-index:60;background:rgba(30,0,6,.8);display:grid;place-items:center;color:#fff3c4;text-align:center;font-weight:900;font-size:19px;padding:20px}
+.ocupado .giro{font-size:52px;animation:giro 1.4s linear infinite;display:inline-block}
+@keyframes giro{to{transform:rotate(360deg)}}
+.tostada{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:70;background:#1f0006;color:#fff3c4;padding:12px 18px;border-radius:14px;border:2px solid var(--oro);max-width:92vw;box-shadow:0 8px 20px rgba(0,0,0,.4);font-weight:700;text-align:center}
+.boton-prueba{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:40;width:58px;height:58px;border-radius:50%;border:3px solid #fff;background:linear-gradient(#5b8cff,#1d4ed8);color:#fff;font-size:26px;box-shadow:0 6px 14px rgba(0,0,0,.4);cursor:pointer}
+.franja-prueba{background:repeating-linear-gradient(45deg,#1d4ed8 0 14px,#2b5cf0 14px 28px);color:#fff;text-align:center;font-weight:900;font-size:13px;padding:5px 10px}
+.franja-prueba.supervisado{background:repeating-linear-gradient(45deg,#e0157f 0 14px,#ff3ea5 14px 28px)}
+table.pares{width:100%;border-collapse:collapse;font-size:15px}
+table.pares td{padding:6px 4px;border-bottom:1px dashed #c9b37a}
+pre.acta{white-space:pre-wrap;font-size:13px;background:#fffef6;border:1px solid #e8d49a;padding:10px;border-radius:10px}
+.pie{text-align:center;color:#ffe9a8;font-size:13px;padding:24px 16px 90px;opacity:.9}
+.perfil-cab{text-align:center;padding-top:20px}
+.perfil-cab h2{font-size:34px;margin:4px 0 0}
+.cargo{display:inline-block;background:var(--verde);color:#ffe8a3;font-weight:900;font-size:13px;padding:3px 12px;border-radius:999px;margin-top:4px}
+.cargo.presi{background:linear-gradient(90deg,#ff3ea5,#ffcc33);color:#5c000e}
+.contador{font-family:'Lobster',cursive;font-size:22px;color:var(--verde);text-align:center;margin:6px 0}
+@media (prefers-reduced-motion:reduce){.copo,.bombilla,.titulo,.cartel.pend,.ocupado .giro{animation:none}}
+</style>
+</head>
+<body>
+<div id="nieve" aria-hidden="true"></div>
+<div class="luces" id="luces" aria-hidden="true"></div>
+<div id="franja"></div>
+<nav class="nav" id="nav"></nav>
+<div class="envoltura"><main id="app"></main></div>
+<div id="capas"></div>
+
+<script type="module">
+/* =====================================================================
+   AZAMAI · Asociación Zamorana del Amigo Invisible
+   =====================================================================
+   CONFIGURACIÓN — lo único que hay que tocar (ver LEEME.md)
+   --------------------------------------------------------------------- */
+
+// 1) Pega aquí la configuración de tu proyecto de Firebase.
+//    Mientras sea null, la app funciona en "modo ensayo": guarda todo
+//    solo en este móvil/ordenador (sirve para probar, no para la familia).
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBqkAxnsLkYZvuTAE65P7GBkTU6WnGB32s",
+  authDomain: "azamai-13d25.firebaseapp.com",
+  projectId: "azamai-13d25",
+  storageBucket: "azamai-13d25.firebasestorage.app",
+  messagingSenderId: "159955549217",
+  appId: "1:159955549217:web:45436d30627187bc807760"
+};
+
+// 2) Versión de prueba: true = aparece el botón azul 🔧 con el que se
+//    ve todo (resultado del sorteo, cartas ocultas), se entra en
+//    cualquier perfil y se adelanta el reloj. Para la versión real: false.
+const MODO_PRUEBA = true;
+
+/* ===================================================================== */
+
+const PIN_PRUEBA = '1111';
+const PRESIDENTA = 'marta';
+const SOCIOS = [
+  {id:'pili', nombre:'Pili'}, {id:'tono', nombre:'Toño'}, {id:'negri', nombre:'Negri'},
+  {id:'belen', nombre:'Belén'}, {id:'mariano', nombre:'Mariano'}, {id:'juanluis', nombre:'Juan Luis'},
+  {id:'charo', nombre:'Charo'}, {id:'carlos', nombre:'Carlos'}, {id:'marieta', nombre:'Marieta'},
+  {id:'titi', nombre:'Titi'}, {id:'javiergg', nombre:'Javier GG'}, {id:'javier', nombre:'Javier Guillén'},
+  {id:'montse', nombre:'Montse'}, {id:'marta', nombre:'Marta'}, {id:'antonio', nombre:'Antonio'}
+];
+const PAREJAS = [['tono','negri'],['belen','mariano'],['juanluis','charo'],['carlos','marieta'],['titi','javiergg'],['javier','montse'],['marta','antonio']];
+const IDS = SOCIOS.map(s => s.id);
+// Siglas bordadas en cada jersey (dos letras cuando la inicial se repite)
+const SIGLAS = {pili:'P', tono:'TO', negri:'N', belen:'B', mariano:'MN', juanluis:'JL', charo:'CH', carlos:'CA', marieta:'ME', titi:'TI', javiergg:'JG', javier:'JV', montse:'MO', marta:'MA', antonio:'A'};
+// [fondo, franjas, motivos, letras] — cuanto más espantoso, mejor
+// Huella de los códigos de invitación (los códigos en sí solo los tiene Javier GG)
+const CODIGOS = {
+  pili:'1df83ef666b21f1bc24283d28da8b87120ddcc58b869633b88f867e30983d193',
+  tono:'dc3aa29a11dfd112622ca16935f41b0523f022eb77f141c91f3c71a869641755',
+  negri:'d0a2c04cee440e310980c6f5ac70b2a8a37c35dc9b76a718fcb148aa160fd8b1',
+  belen:'99fb0c578b10ea43aa4718a21163becf6c2138f3c899cd6aae8924db6f366a57',
+  mariano:'f4c09ca8aaff9e330d254a822ff9a664e37c7a83692fdba420f5a7e07a0463c2',
+  juanluis:'3566f6df3f6c3431f214506fc2f9ddfc70ebab9a2c0e9a863992ba172ef5cf1b',
+  charo:'08f8ea7060294755194b47821d13836597b093538ebd4dbb400a14033e079967',
+  carlos:'e5bd5c58703e2c704b919bcedb0fa3b6c4a835147d357ab8d3a3eae8cb40a620',
+  marieta:'6ac792fe8fdbc5aec26f4e989cc36694eb267e15ca3cf74114e101c036ccfadc',
+  titi:'ed39360414c694d1c5fd6c15bee926ffa0efdf646382bf0c68186f3cf3cabd2b',
+  javiergg:'e5dcf614ac58d3f5375b8260fccc8099975d8a7aa03e3afe07981d17cb2b1307',
+  javier:'7683b17fe64d733ec1ddf65026e1bcfada447f09edf9941ed34bbc9d7166ebcb',
+  montse:'20722a78dc1cbeeaf65e7c96e9a570ccc7bf251f450f52ba9827747091057520',
+  marta:'1753fbadcc203416e4000826a6cdcfb3124e56c1a495bd0a2c2042f4db25ede3',
+  antonio:'261fcc752b59a7dbf9ff8cf942f431a350b5a5c58a291773dd225bcc7aaca588'
+};
+const PALETAS = {
+  pili:['#e3007a','#7cff00','#ffe600','#ffffff'], tono:['#0b7a3a','#ff2b2b','#ffffff','#ffe600'],
+  negri:['#5a2d82','#ff9f1c','#2ec4b6','#ffffff'], belen:['#c8102e','#ffffff','#0b7a3a','#ffffff'],
+  mariano:['#d4a017','#8b0000','#00a86b','#3b1f00'], juanluis:['#00838f','#ff4fa3','#fff176','#ffffff'],
+  charo:['#ff6f00','#4a148c','#76ff03','#ffffff'], carlos:['#1a237e','#ff1744','#ffffff','#ffd600'],
+  marieta:['#aeea00','#d50000','#ffffff','#b71c1c'], titi:['#ff80ab','#00c853','#ffffff','#1b5e20'],
+  javiergg:['#4e342e','#ffab00','#ff3d00','#ffe082'], javier:['#b71c1c','#00e5ff','#ffeb3b','#ffffff'],
+  montse:['#6a1b9a','#c6ff00','#ff4081','#ffffff'], marta:['#ffd700','#c8102e','#0b7a3a','#8b0000'],
+  antonio:['#2e7d32','#ff6d00','#e1f5fe','#ffffff']
+};
+const socio = id => SOCIOS.find(s => s.id === id);
+const nom = id => socio(id)?.nombre || id;
+
+/* ---------- Utilidades ---------- */
+const $ = sel => document.querySelector(sel);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const enlazar = s => esc(s).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`);
+const ls = (() => { const mem = {}; return {
+  get(k){ try { return localStorage.getItem(k); } catch(e){ return mem[k] ?? null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e){ mem[k] = v; } },
+  del(k){ try { localStorage.removeItem(k); } catch(e){ delete mem[k]; } }
+}; })();
+const DIA = 864e5;
+let desfaseDias = MODO_PRUEBA ? Number(ls.get('azamai-desfase') || 0) : 0;
+const ahora = () => Date.now() + desfaseDias * DIA;
+const ahoraISO = () => new Date(ahora()).toISOString();
+const diasDesde = iso => Math.floor((ahora() - Date.parse(iso)) / DIA);
+const fLarga = iso => new Date(iso).toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'});
+const fHora = iso => new Date(iso).toLocaleString('es-ES', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+const sumarDias = (iso, d) => new Date(Date.parse(iso) + d * DIA).toISOString();
+function tostada(texto, ms = 3800){ const t = document.createElement('div'); t.className = 'tostada'; t.textContent = texto; document.body.appendChild(t); setTimeout(() => t.remove(), ms); }
+const esApp = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+/* ---------- Criptografía: el sorteo queda sellado ---------- */
+const te = new TextEncoder(), td = new TextDecoder();
+const b64 = buf => { const u = new Uint8Array(buf); let s = ''; for (let i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const azar = n => crypto.getRandomValues(new Uint8Array(n));
+const ITER = 250000;
+async function llavePin(pin, salt){
+  const base = await crypto.subtle.importKey('raw', te.encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:ITER, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function crearLlaves(pin){
+  const kp = await crypto.subtle.generateKey({name:'RSA-OAEP', modulusLength:2048, publicExponent:new Uint8Array([1,0,1]), hash:'SHA-256'}, true, ['encrypt','decrypt']);
+  const pub = await crypto.subtle.exportKey('jwk', kp.publicKey);
+  const pkcs8 = await crypto.subtle.exportKey('pkcs8', kp.privateKey);
+  const salt = azar(16), iv = azar(12);
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, await llavePin(pin, salt), pkcs8);
+  const priv = await crypto.subtle.importKey('pkcs8', pkcs8, {name:'RSA-OAEP', hash:'SHA-256'}, false, ['decrypt']);
+  return { doc:{ pub:{kty:pub.kty, n:pub.n, e:pub.e, alg:pub.alg}, privEnc:{salt:b64(salt), iv:b64(iv), ct:b64(ct)}, keyId:b64(azar(6)) }, priv };
+}
+async function abrirLlave(privEnc, pin){
+  const pkcs8 = await crypto.subtle.decrypt({name:'AES-GCM', iv:unb64(privEnc.iv)}, await llavePin(pin, unb64(privEnc.salt)), unb64(privEnc.ct));
+  return crypto.subtle.importKey('pkcs8', pkcs8, {name:'RSA-OAEP', hash:'SHA-256'}, false, ['decrypt']);
+}
+async function sellar(pubJwk, texto){
+  const pk = await crypto.subtle.importKey('jwk', pubJwk, {name:'RSA-OAEP', hash:'SHA-256'}, false, ['encrypt']);
+  const k = await crypto.subtle.generateKey({name:'AES-GCM', length:256}, true, ['encrypt']);
+  const iv = azar(12);
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, k, te.encode(texto));
+  const ek = await crypto.subtle.encrypt({name:'RSA-OAEP'}, pk, await crypto.subtle.exportKey('raw', k));
+  return {iv:b64(iv), ct:b64(ct), ek:b64(ek)};
+}
+async function abrirSobre(priv, s){
+  const raw = await crypto.subtle.decrypt({name:'RSA-OAEP'}, priv, unb64(s.ek));
+  const k = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+  return td.decode(await crypto.subtle.decrypt({name:'AES-GCM', iv:unb64(s.iv)}, k, unb64(s.ct)));
+}
+
+async function codigoValido(id, codigo){
+  const c = String(codigo || '').toUpperCase().replace(/\s+/g, '').split('-').pop();
+  if (!/^[A-Z0-9]{6}$/.test(c) || !CODIGOS[id]) return false;
+  const base = await crypto.subtle.importKey('raw', te.encode(c), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt:te.encode('azamai:' + id), iterations:100000, hash:'SHA-256'}, base, 256);
+  return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, '0')).join('') === CODIGOS[id];
+}
+
+/* ---------- El sorteo ---------- */
+const alAzar = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
+const barajar = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--){ const j = alAzar(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const prohibido = (a, b) => a === b || PAREJAS.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+function sortear(sinReciprocos = true){
+  const dadores = barajar(IDS), pares = {}, usados = new Set();
+  const paso = i => {
+    if (i === dadores.length) return true;
+    for (const r of barajar(IDS)){
+      if (usados.has(r) || prohibido(dadores[i], r) || (sinReciprocos && pares[r] === dadores[i])) continue;
+      pares[dadores[i]] = r; usados.add(r);
+      if (paso(i + 1)) return true;
+      usados.delete(r); delete pares[dadores[i]];
+    }
+    return false;
+  };
+  if (!paso(0)){
+    if (sinReciprocos) return sortear(false);   // si fuera imposible evitar todos los recíprocos
+    throw new Error('No hay combinación posible');
+  }
+  verificar(pares);
+  return pares;
+}
+const reciprocos = pares => Object.keys(pares).filter(a => pares[pares[a]] === a && a < pares[a]).length;
+function verificar(pares){
+  const dan = Object.keys(pares), reciben = Object.values(pares);
+  if (dan.length !== IDS.length || !IDS.every(id => id in pares)) throw new Error('Alguien se ha quedado sin regalar');
+  if (new Set(reciben).size !== IDS.length || !IDS.every(id => reciben.includes(id))) throw new Error('Alguien se ha quedado sin regalo o recibe dos');
+  for (const d of dan) if (prohibido(d, pares[d])) throw new Error('Regalo prohibido: ' + d + ' → ' + pares[d]);
+  return true;
+}
+/* ---------- Acta en Word (.docx real, generado en el propio móvil) ---------- */
+const xe = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function wP(texto, o = {}){
+  return `<w:p><w:pPr><w:spacing w:after="${o.despues ?? 120}"/>${o.centro ? '<w:jc w:val="center"/>' : ''}</w:pPr><w:r><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/>${o.negrita ? '<w:b/>' : ''}${o.cursiva ? '<w:i/>' : ''}${o.color ? `<w:color w:val="${o.color}"/>` : ''}<w:sz w:val="${(o.tam || 11) * 2}"/></w:rPr><w:t xml:space="preserve">${xe(texto)}</w:t></w:r></w:p>`;
+}
+function wCelda(texto, ancho, o = {}){
+  return `<w:tc><w:tcPr><w:tcW w:w="${ancho}" w:type="dxa"/>${o.fondo ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.fondo}"/>` : ''}</w:tcPr>${wP(texto, {despues:40, ...o})}</w:tc>`;
+}
+function documentoActa(pares, fecha, ronda){
+  const borde = t => `<w:${t} w:val="single" w:sz="6" w:space="0" w:color="B8860B"/>`;
+  const anchos = [700, 3600, 700, 3600];
+  const fila = (cs, o) => `<w:tr>${cs.map((c, i) => wCelda(c, anchos[i], o)).join('')}</w:tr>`;
+  const hora = new Date(fecha).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
+  const rec = reciprocos(pares);
+  const cuerpo = [
+    wP('ASOCIACIÓN ZAMORANA DEL AMIGO INVISIBLE', {centro:true, negrita:true, tam:15, color:'B3001B', despues:0}),
+    wP('A.Z.A.M.A.I.', {centro:true, tam:11, color:'B3001B', despues:300}),
+    wP('ACTA DEL SORTEO', {centro:true, negrita:true, tam:22, color:'0C7A3A', despues:300}),
+    wP(`En la fecha de ${fLarga(fecha)}, a las ${hora} horas, por decisión soberana e inapelable de la Presidenta Vitalicia, Doña Marta, se celebra el sorteo del Amigo Invisible entre los quince socios de número de la Asociación, con el siguiente`, {despues:200}),
+    wP('RESULTADO', {negrita:true, tam:13, color:'B3001B'}),
+    `<w:tbl><w:tblPr><w:tblW w:w="8600" w:type="dxa"/><w:tblBorders>${['top','left','bottom','right','insideH','insideV'].map(borde).join('')}</w:tblBorders></w:tblPr><w:tblGrid>${anchos.map(a => `<w:gridCol w:w="${a}"/>`).join('')}</w:tblGrid>`
+      + fila(['Nº', 'Quien regala', '', 'A quien regala'], {negrita:true, fondo:'FFF2CC'})
+      + IDS.map((id, i) => fila([String(i + 1), nom(id), '→', nom(pares[id])])).join('')
+      + '</w:tbl>',
+    wP('', {despues:120}),
+    wP('COMPROBACIONES', {negrita:true, tam:13, color:'B3001B'}),
+    wP('✔ Quince socios y quince regalos.'),
+    wP('✔ Nadie se regala a sí mismo.'),
+    wP('✔ Ninguna pareja se regala entre sí.'),
+    wP('✔ Cada socio hace un solo regalo y recibe un solo regalo.'),
+    wP(rec ? `✔ Regalos recíprocos: ${rec} (no fue posible evitarlos todos).` : '✔ Ningún regalo recíproco: nadie regala a quien le regala.', {despues:300}),
+    wP('Y para que conste, se extiende la presente acta, de uso exclusivo de la Presidencia, cuya difusión no autorizada será castigada con carbón.', {cursiva:true, despues:500}),
+    wP('La Presidenta Vitalicia', {centro:true, negrita:true, despues:0}),
+    wP('(firma ilegible, pero inapelable)', {centro:true, cursiva:true, tam:9, despues:300}),
+    wP(`Referencia del sorteo: ${ronda}`, {tam:8, color:'888888'})
+  ].join('');
+  return zipDocx({
+    '[Content_Types].xml':'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+    '_rels/.rels':'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+    'word/document.xml':`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${cuerpo}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1418" w:right="1418" w:bottom="1418" w:left="1418" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+const TABLA_CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++){ let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = u => { let c = 0xFFFFFFFF; for (let i = 0; i < u.length; i++) c = TABLA_CRC[(c ^ u[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+function zipDocx(archivos){
+  const partes = [], central = []; let off = 0, n = 0;
+  for (const [nombre, txt] of Object.entries(archivos)){
+    const nb = te.encode(nombre), d = te.encode(txt), c = crc32(d); n++;
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+    h.setUint16(10, 0, true); h.setUint16(12, 0x21, true); h.setUint32(14, c, true); h.setUint32(18, d.length, true);
+    h.setUint32(22, d.length, true); h.setUint16(26, nb.length, true); h.setUint16(28, 0, true);
+    partes.push(new Uint8Array(h.buffer), nb, d);
+    const cd = new DataView(new ArrayBuffer(46));
+    cd.setUint32(0, 0x02014b50, true); cd.setUint16(4, 20, true); cd.setUint16(6, 20, true); cd.setUint16(8, 0x0800, true);
+    cd.setUint16(10, 0, true); cd.setUint16(12, 0, true); cd.setUint16(14, 0x21, true); cd.setUint32(16, c, true);
+    cd.setUint32(20, d.length, true); cd.setUint32(24, d.length, true); cd.setUint16(28, nb.length, true);
+    cd.setUint32(42, off, true);
+    central.push(new Uint8Array(cd.buffer), nb);
+    off += 30 + nb.length + d.length;
+  }
+  const tc = central.reduce((a, b) => a + b.length, 0);
+  const e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, n, true); e.setUint16(10, n, true); e.setUint32(12, tc, true); e.setUint32(16, off, true);
+  return new Blob([...partes, ...central, new Uint8Array(e.buffer)], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+async function guardarArchivo(nombre, blob){
+  try {
+    const dl = await window.claude?.use?.('downloads');
+    if (dl){ await dl.save({filename:nombre, data:blob}); return true; }
+  } catch(e){ if (e?.code === 'declined') return false; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  return true;
+}
+const nombreActa = () => `AZAMAI-acta-del-sorteo-${new Date(Date.parse(S.estado.fechaSorteo || ahoraISO())).toISOString().slice(0, 10)}.docx`;
+
+/* ---------- Almacén de datos: Firebase o modo ensayo ---------- */
+function almacenEnsayo(){
+  const K = 'azamai-ensayo';
+  const leer = () => { try { return JSON.parse(ls.get(K) || '{}'); } catch(e){ return {}; } };
+  let datos = leer(); const subs = {};
+  const lista = c => Object.entries(datos[c] || {}).map(([id, d]) => ({id, ...d}));
+  const emitir = c => (subs[c] || []).forEach(cb => cb(lista(c)));
+  const guardar = c => { ls.set(K, JSON.stringify(datos)); emitir(c); };
+  window.addEventListener('storage', e => { if (e.key === K){ datos = leer(); Object.keys(subs).forEach(emitir); } });
+  return {
+    tipo:'ensayo',
+    async getDoc(c, id){ return datos[c]?.[id] ? JSON.parse(JSON.stringify(datos[c][id])) : null; },
+    async setDoc(c, id, d, merge = true){ datos[c] = datos[c] || {}; datos[c][id] = merge ? {...(datos[c][id] || {}), ...d} : d; guardar(c); },
+    async delDoc(c, id){ if (datos[c]) delete datos[c][id]; guardar(c); },
+    async addDoc(c, d){ datos[c] = datos[c] || {}; datos[c]['m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)] = d; guardar(c); },
+    watchCol(c, cb){ (subs[c] = subs[c] || []).push(cb); setTimeout(() => cb(lista(c)), 0); }
+  };
+}
+async function almacenFirebase(cfg){
+  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}/`;
+  const app = await import(base + 'firebase-app.js');
+  const fs = await import(base + 'firebase-firestore.js');
+  const au = await import(base + 'firebase-auth.js');
+  const a = app.initializeApp(cfg);
+  await au.signInAnonymously(au.getAuth(a));
+  const db = fs.getFirestore(a);
+  return {
+    tipo:'firebase',
+    async getDoc(c, id){ const s = await fs.getDoc(fs.doc(db, c, id)); return s.exists() ? s.data() : null; },
+    async setDoc(c, id, d, merge = true){ await fs.setDoc(fs.doc(db, c, id), d, {merge}); },
+    async delDoc(c, id){ await fs.deleteDoc(fs.doc(db, c, id)); },
+    async addDoc(c, d){ await fs.addDoc(fs.collection(db, c), d); },
+    watchCol(c, cb){ fs.onSnapshot(fs.collection(db, c), snap => cb(snap.docs.map(d => ({id:d.id, ...d.data()}))), err => { console.error(err); tostada('Error de conexión: ' + err.code); }); }
+  };
+}
+
+/* ---------- Estado ---------- */
+const S = { estado:{fase:'abierta'}, prueba:null, socios:{}, asign:{}, actas:{}, cartas:{}, mensajes:[], preguntas:[], cargado:{} };
+let DB = null;
+let sesion = null;            // {id, priv, keyId, supervisado}
+let cacheAmigo = {}, cargandoAmigo = new Set();
+const ui = { ocupado:'', confirmacion:null, modal:null, prueba:false, sobre:false, editor:null, ultimaVisita:null, dictado:null };
+
+const fase = () => S.estado?.fase || 'abierta';
+const ronda = () => S.estado?.ronda || null;
+const cartaDe = id => S.cartas[`${ronda()}_${id}`] || null;
+const enviadas = () => ronda() ? IDS.filter(id => cartaDe(id)?.enviada) : [];
+const todasEnviadas = () => fase() === 'validado' && enviadas().length === IDS.length;
+const fechaPublicacion = () => todasEnviadas() ? enviadas().map(id => cartaDe(id).fechaEnvio).sort().at(-1) : null;
+const preguntasRonda = () => S.preguntas.filter(p => p.ronda && p.ronda === ronda());
+const mensajesPara = para => S.mensajes.filter(m => m.para === para && (!m.ronda || m.ronda === ronda()));
+const registrados = () => IDS.filter(id => S.socios[id]?.pub);
+
+function amigo(){
+  if (!sesion || fase() !== 'validado') return null;
+  const k = `${ronda()}_${sesion.id}`;
+  if (k in cacheAmigo) return cacheAmigo[k];
+  if (!cargandoAmigo.has(k)){
+    cargandoAmigo.add(k);
+    (async () => {
+      let r = null;
+      const a = S.asign[k];
+      if (sesion?.priv && a && a.keyId === S.socios[sesion.id]?.keyId){ try { r = await abrirSobre(sesion.priv, a.sobre); } catch(e){ r = null; } }
+      if (!r && MODO_PRUEBA && S.prueba?.ronda === ronda()) r = S.prueba.pares?.[sesion.id] || null;
+      cacheAmigo[k] = r; cargandoAmigo.delete(k); pintar();
+    })();
+  }
+  return undefined;
+}
+
+/* ---------- Textos jocosamente serios ---------- */
+const TXT = {
+  sorteoPersonal: 'Se ha celebrado el sorteo. La suprema autoridad de AZAMAI está verificando su validez. Pronto recibirás noticias.',
+  sorteoPublico: 'Por decisión soberana de la Presidenta Vitalicia se ha celebrado el sorteo de AZAMAI. La suprema autoridad verifica ahora su validez. Guardad la calma y el turrón.',
+  validoPublico: 'La Presidenta Vitalicia ha declarado VÁLIDO el sorteo. Cada socio puede consultar en su perfil a quién le toca regalar. Queda abierto el plazo de cartas a Sus Majestades.',
+  revelacion: n => `La suprema autoridad de AZAMAI ha verificado el sorteo y lo ha encontrado conforme. Por la presente se te comunica que debes hacer tu regalo a <b>${esc(n)}</b>. Guarda el secreto como si fuera la receta del roscón. Ya puedes escribir tu carta.`,
+  registro: (id) => id === PRESIDENTA
+    ? `ACTA DE INCORPORACIÓN.<br><br>En la fecha que consta, queda inscrita en el Libro Registro de Socios de la Asociación Zamorana del Amigo Invisible (AZAMAI) <b>Doña Marta</b>, quien, por unanimidad de todos los socios presentes, ausentes y por venir, ha sido elegida <b>Presidenta Vitalicia</b>, cargo que acepta con la humildad que la caracteriza.<br><br>Sus decisiones son inapelables desde este preciso instante.`
+    : `ACTA DE INCORPORACIÓN.<br><br>En la fecha que consta, se inscribe en el Libro Registro de Socios de la Asociación Zamorana del Amigo Invisible (AZAMAI) a <b>${esc(nom(id))}</b>, con todos los derechos y, sobre todo, con todas las obligaciones que ello comporta.<br><br>Asimismo, y por el mero hecho de su incorporación, <b>${esc(nom(id))}</b> ha elegido <b>voluntaria, democrática e irrevocablemente</b> a <b>Doña Marta</b> como <b>Presidenta Vitalicia de AZAMAI</b>, renunciando de forma expresa a todo recurso, queja, mohín o suspiro contra sus decisiones.<br><br>Que el turrón te acompañe.`,
+  registroPublico: id => id === PRESIDENTA
+    ? '👑 Doña Marta ha tomado posesión de la Presidencia Vitalicia de AZAMAI. Se ruega reverencia.'
+    : `🎖️ ${nom(id)} se ha inscrito en el Libro Registro de AZAMAI y ha elegido, voluntaria, democrática e irrevocablemente, a Doña Marta como Presidenta Vitalicia. Bienvenida unánime.`,
+  felicitacionPublica: id => `👑👑👑 ¡${nom(id).toUpperCase()} HA CUMPLIDO! La suprema autoridad de AZAMAI y Sus Majestades los Reyes Magos, en un estado de alegría difícilmente descriptible, felicitan públicamente a ${nom(id)} por el envío de su carta. Que cunda el ejemplo.`,
+  felicitacionPersonal: 'La suprema autoridad de AZAMAI y los tres Reyes Magos, muy contentos 👑👑👑, te felicitan por haber enviado tu carta en tiempo y forma. Queda constancia en acta. Puedes seguir editándola cuando quieras (sin abusar, que los camellos se cansan).',
+  cambiosPublicos: [
+    (n, v) => `🖋️ ¡Atención! ${n} ha retocado su carta. Sus Majestades tachan, corrigen y suspiran. (Versión ${v})`,
+    (n, v) => `📝 ${n} ha cambiado de opinión. Otra vez. Los pajes reales ya llevan la cuenta: versión ${v}.`,
+    (n, v) => `🔄 Novedad editorial: la carta de ${n} sale en ${v}ª edición, revisada, corregida y (esperemos) definitiva.`,
+    (n, v) => `🐪 Los camellos tienen que volver a cargar: ${n} ha modificado su carta. Ya van ${v} versiones.`,
+    (n, v) => `📣 Se informa al público que la carta de ${n} ha sido cambiada. La Secretaría archiva la versión ${v} con resignación.`
+  ],
+  reproches: [
+    n => `${n}: Sus Majestades han notado, sin darle importancia, que tu carta aún no ha llegado. Seguro que es un despiste. 👑`,
+    n => `${n}, los pajes reales preguntan por tu carta. Les hemos dicho que estás buscando inspiración. Se lo han creído a medias.`,
+    n => `AVISO OFICIAL. La Secretaría de AZAMAI hace constar en acta que ${n} no ha enviado su carta. El camello de Baltasar ha empezado a resoplar. 🐪`,
+    n => `${n}: Melchor ha dejado de sonreír. Gaspar se rasca la barba. Baltasar no dice nada, que es peor. 👑👑👑`,
+    n => `REQUERIMIENTO FORMAL. Se requiere a ${n} para que, en el plazo improrrogable de ya, remita su carta, con apercibimiento de que su silencio será interpretado como un deseo ferviente de recibir calcetines. 🧦`,
+    n => `${n}, tu amigo invisible ha empezado a mirar catálogos de pijamas de franela con estampado de renos. Tú sabrás.`,
+    n => `Los camellos se han declarado en huelga indefinida hasta que llegue tu carta, ${n}. La patronal del turrón está muy preocupada. 🐪🐪🐪`,
+    n => `ÚLTIMO AVISO. La Presidenta Vitalicia ha sido informada de tu caso, ${n}. Recuerda: sus decisiones son inapelables y su paciencia, finita. Sus Majestades están MUY enfadadas. 👑💢`,
+    n => `Esto ya no es un aviso, ${n}: es una costumbre. Seguimos sin carta. El carbón está encargado y pagado. ⚫`
+  ],
+  reprochesPublicos: [
+    'Sus Majestades han notado, sin darle importancia, que aún faltan algunas cartas. Seguro que es un despiste.',
+    'Los pajes reales preguntan por las cartas que faltan. Se les ha dicho que sus autores buscan inspiración. Se lo han creído a medias.',
+    'AVISO OFICIAL. La Secretaría de AZAMAI hace constar en acta la falta de las cartas de los rezagados. El camello de Baltasar ha empezado a resoplar. 🐪',
+    'Melchor ha dejado de sonreír. Gaspar se rasca la barba. Baltasar no dice nada, que es peor. 👑👑👑',
+    'REQUERIMIENTO PÚBLICO. Se requiere a los rezagados para que, en el plazo improrrogable de ya, remitan sus cartas, con apercibimiento de que su silencio se interpretará como un deseo ferviente de recibir calcetines. 🧦',
+    'Los amigos invisibles de los rezagados han empezado a mirar catálogos de pijamas de franela con renos. Allá ellos.',
+    'Los camellos se han declarado en huelga indefinida hasta que lleguen todas las cartas. La patronal del turrón está muy preocupada. 🐪🐪🐪',
+    'ÚLTIMO AVISO. La Presidenta Vitalicia ha sido informada. Sus decisiones son inapelables y su paciencia, finita. Sus Majestades están MUY enfadadas. 👑💢',
+    'Esto ya no es un aviso: es una costumbre. El carbón está encargado y pagado. ⚫'
+  ],
+  recordatorios: [
+    () => 'Tienes una pregunta anónima sin responder. Alguien quiere acertar contigo: déjate ayudar. 🤫',
+    () => 'Segundo aviso: la pregunta sigue ahí, mirándote. Tu amigo invisible está a punto de comprarte algo de talla única.',
+    () => 'La Secretaría de AZAMAI observa con preocupación tu silencio. Responder cuesta menos que devolver un regalo.',
+    () => 'Sus Majestades han leído la pregunta. Y han visto que no respondes. 👑👀',
+    () => 'RECORDATORIO SOLEMNE. La Presidenta Vitalicia ha preguntado por ti. Contesta ya, por el bien de todos.'
+  ]
+};
+// Los reproches llegan alternando cada 2 y 3 días: días 2, 5, 7, 10, 12, 15...
+const umbralReproche = k => Math.floor(k * 2.5);
+function reprochesDe(id){
+  const out = [], ini = S.estado.fechaValidacion, ya = ahoraISO();
+  if (!ini) return out;
+  for (let k = 1; k <= 60; k++){
+    const f = sumarDias(ini, umbralReproche(k));
+    if (f > ya) break;
+    const t = TXT.reproches[Math.min(k - 1, TXT.reproches.length - 1)];
+    out.push({fecha:f, nivel:k, clase:'reproche' + (k >= 5 ? ' duro' : ''), ico:k >= 7 ? '👑💢' : k >= 3 ? '🐪💢' : '👑⏰', de:k >= 5 ? 'Requerimiento de Sus Majestades' : 'Sus Majestades', html:esc(t(nom(id)))});
+  }
+  return out;
+}
+
+/* ---------- Componentes ---------- */
+let nJersey = 0;
+function motivo(tipo, y, color){
+  let g = '';
+  for (let x = 5; x < 100; x += 10){
+    if (tipo === 0) g += `<polyline points="${x - 5},${y + 3} ${x},${y - 3} ${x + 5},${y + 3}" fill="none" stroke="${color}" stroke-width="2"/>`;
+    else if (tipo === 1) g += `<polygon points="${x},${y - 4} ${x + 4},${y} ${x},${y + 4} ${x - 4},${y}" fill="${color}"/>`;
+    else if (tipo === 2) g += `<polygon points="${x},${y - 5} ${x + 4},${y + 3} ${x - 4},${y + 3}" fill="${color}"/><rect x="${x - 1}" y="${y + 3}" width="2" height="2" fill="${color}"/>`;
+    else if (tipo === 3) g += `<circle cx="${x}" cy="${y + ((x / 10) % 2 ? -2 : 2)}" r="2.2" fill="${color}"/>`;
+    else if (tipo === 4) g += `<path d="M${x - 3.5} ${y}h7M${x} ${y - 3.5}v7M${x - 2.5} ${y - 2.5}l5 5M${x + 2.5} ${y - 2.5}l-5 5" stroke="${color}" stroke-width="1.3"/>`;
+    else g += `<path d="M${x} ${y + 4} l-4 -4 a2.2 2.2 0 0 1 4 -2.5 a2.2 2.2 0 0 1 4 2.5 z" fill="${color}"/>`;
+  }
+  return g;
+}
+function jerseySVG(id){
+  const [fondo, franja, adorno, letra] = PALETAS[id] || ['#c8102e', '#fff', '#0b7a3a', '#fff'];
+  const i = IDS.indexOf(id), u = 'jr' + (nJersey++), sig = SIGLAS[id] || '?';
+  const cuerpo = 'M39 9 L27 13 L15 20 L4 85 L18 88 L26 42 L26 94 L74 94 L74 42 L82 88 L96 85 L85 20 L73 13 L61 9 Q50 18 39 9 Z';
+  let copos = '';
+  for (let k = 0; k < 9; k++){ const x = 28 + ((k * 37 + i * 11) % 46), y = 38 + ((k * 23 + i * 7) % 28); copos += `<circle cx="${x}" cy="${y}" r="1.1" fill="${adorno}" opacity=".55"/>`; }
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="Jersey de ${esc(nom(id))}"><defs><clipPath id="${u}"><path d="${cuerpo}"/></clipPath></defs>
+    <path d="${cuerpo}" fill="${fondo}"/>
+    <g clip-path="url(#${u})">${copos}
+      <rect x="0" y="23" width="100" height="11" fill="${franja}"/>${motivo(i % 6, 28.5, adorno)}
+      <rect x="0" y="71" width="100" height="11" fill="${franja}"/>${motivo((i + 3) % 6, 76.5, adorno)}
+      <rect x="26" y="87" width="48" height="8" fill="${adorno}"/>
+      <path d="M30 87v8M34 87v8M38 87v8M42 87v8M46 87v8M50 87v8M54 87v8M58 87v8M62 87v8M66 87v8M70 87v8" stroke="rgba(0,0,0,.25)" stroke-width=".8"/>
+      <polygon points="5.2,78 19.2,80.5 18,88 4,85" fill="${adorno}"/><polygon points="94.8,78 80.8,80.5 82,88 96,85" fill="${adorno}"/>
+      <path d="M8 79l-1 6M11.5 79.6l-1 6.5M15 80.2l-1 6.8M92 79l1 6M88.5 79.6l1 6.5M85 80.2l1 6.8" stroke="rgba(0,0,0,.25)" stroke-width=".8"/>
+    </g>
+    <path d="${cuerpo}" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M42 10 Q50 18 58 10" fill="none" stroke="${adorno}" stroke-width="4"/>
+    <text x="50" y="${sig.length > 1 ? 61 : 63}" text-anchor="middle" font-family="Lobster, 'Arial Black', Impact, sans-serif" font-size="${sig.length > 1 ? 23 : 30}" fill="${letra}" stroke="rgba(0,0,0,.5)" stroke-width="1.4" paint-order="stroke" letter-spacing="1">${sig}</text>
+  </svg>`;
+}
+function bola(id, cls = ''){
+  return `<div class="bola ${cls}">${id === PRESIDENTA ? '<span class="corona">👑</span>' : ''}${jerseySVG(id)}</div>`;
+}
+function msgHTML(m, puedeBorrar = false){
+  const nuevo = ui.ultimaVisita && m.fecha > ui.ultimaVisita ? '<span class="nuevo">NUEVO</span>' : '';
+  return `<div class="msg ${m.clase || ''}">${nuevo}<div class="ico">${m.ico || '📜'}</div><div class="cuerpo">${m.de ? `<div class="de">${esc(m.de)}</div>` : ''}<div>${m.html}</div><div class="fecha">${fHora(m.fecha)}</div></div>${puedeBorrar && m.docId ? `<button class="borrar" data-a="borrar-msg" data-id="${m.docId}">borrar</button>` : ''}</div>`;
+}
+const ESTILO = { presidencia:['presi','👑','La Presidencia'], sistema:['sistema','📢','Secretaría de AZAMAI'], felicitacion:['fiesta','👑👑👑','Sus Majestades'], cambio:['cambio','🖋️','Mensajería Real'], registro:['solemne','🎖️','Libro Registro'] };
+function deDoc(m){ const [clase, ico, de] = ESTILO[m.tipo] || ESTILO.sistema; return {fecha:m.fecha, clase, ico, de, html:m.html ? m.html : enlazar(m.texto).replace(/\n/g, '<br>'), docId:m.id}; }
+function cartaHTML(id, c){
+  if (!c) return '';
+  const enl = (c.enlaces || []).filter(e => /^https?:\/\//i.test(e.url));
+  return `<div class="carta-cab">${bola(id, 's')}<b>Carta de ${esc(nom(id))}</b></div>
+    <div class="carta">${enlazar(c.texto || '')}</div>
+    ${enl.length ? `<ul class="enlaces">${enl.map(e => `<li>🔗 <a href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">${esc(e.desc || e.url)}</a></li>`).join('')}</ul>` : ''}
+    <p class="nota">Versión ${c.version || 1} · última modificación ${fHora(c.fechaUltima || c.fechaEnvio)}</p>`;
+}
+
+/* ---------- Vistas ---------- */
+function vistaInicio(){
+  const f = fase(), env = enviadas().length;
+  const cinta = f === 'abierta' ? `Censo: ${registrados().length} de 15 socios · A la espera de que la Presidenta convoque el sorteo`
+    : f === 'sorteado' ? 'Sorteo celebrado · La suprema autoridad verifica su validez'
+    : todasEnviadas() ? '¡Todas las cartas han llegado! Buzón real abierto' : `Sorteo válido · Cartas enviadas: ${env} de 15`;
+  const visto = ls.get('azamai-visto-inicio');
+  ls.set('azamai-visto-inicio', '1');
+  const tablon = tablonItems();
+  const esMarta = sesion?.id === PRESIDENTA;
+  return `
+  <section class="hero">
+    <div class="escudo">⭐🎁⭐</div>
+    <h1 class="titulo">AZAMAI</h1>
+    <p class="subtitulo">Asociación Zamorana del Amigo Invisible</p>
+    <p class="lema">«Dar sin saber, recibir sin preguntar, obedecer sin rechistar»</p>
+    <div class="cinta">${esc(cinta)}</div>
+  </section>
+  ${!esApp() ? `<div class="aviso-instalar"><span>📲 ¿Aún no tienes la app en tu móvil?</span><a href="#instalar">Instálala aquí</a></div>` : ''}
+
+  <details class="tarjeta estatutos" id="d-motivos" ${visto ? '' : 'open'}>
+    <summary><h2><span><span class="adorno">✦</span> Exposición de motivos</span></h2></summary>
+    <p><b>CONSIDERANDO</b> que la Navidad no se organiza sola; que el turrón, por sí mismo, no garantiza la paz familiar; y que la memoria humana es frágil y la de los cuñados lo es especialmente;</p>
+    <p><b>CONSIDERANDO</b> asimismo que el Amigo Invisible es una institución de interés general, cuya continuidad no puede quedar al albur de papelitos doblados en un tazón,</p>
+    <p>la <b>Asociación Zamorana del Amigo Invisible (AZAMAI)</b> se dota de la presente aplicación con el solemne fin de <b>asegurar la continuidad y la gestión anual de sus sorteos</b>, por los siglos de los siglos.</p>
+    <p><b>Artículo 1.</b> El sorteo se celebra cuando lo decide, única y exclusivamente, la Presidenta Vitalicia. Y tantas veces como lo decida.</p>
+    <p><b>Artículo 2.</b> Nadie conoce el resultado salvo la Presidencia. Ni siquiera esta aplicación, que lo guarda sellado bajo siete llaves (criptográficas, y no es broma).</p>
+    <p><b>Artículo 3.</b> Las parejas de hecho, de derecho y de costumbre no pueden regalarse entre sí, por ser cosa sabida que ya se lo regalan todo el año.</p>
+    <p><b>Artículo 4.</b> Cada socio escribirá su carta. Las cartas permanecerán lacradas hasta que todas hayan sido enviadas. La demora será objeto de escarnio público.</p>
+    <p><b>Disposición final.</b> Lo no previsto en estos estatutos lo resolverá la Presidenta. Lo previsto, también.</p>
+  </details>
+
+  <details class="tarjeta presi" id="d-loa" ${visto ? '' : 'open'}>
+    <summary><h2><span><span class="adorno">♛</span> Loa a la Presidenta Vitalicia</span></h2></summary>
+    ${bola(PRESIDENTA, 'xl')}
+    <p style="text-align:center;font-family:'Lobster',cursive;font-size:24px;color:#b3001b;margin:4px 0">Doña Marta</p>
+    <p>Ella, que convoca el sorteo cuando le place y lo valida cuando le parece; ella, cuya sola mirada hace que un camello acelere el paso; ella, que no necesita motivar sus resoluciones porque su mera existencia ya las motiva.</p>
+    <p>Elegida <b>voluntaria, democrática e irrevocablemente</b> por todos y cada uno de los socios (lo supieran o no), Doña Marta preside AZAMAI con mano firme, criterio insobornable y un gusto exquisito para el espumillón.</p>
+    <p>Se recuerda a los socios que <b>las decisiones de la Presidencia son inapelables</b>, por arbitrarias que parezcan, y que precisamente su arbitrariedad es la mejor prueba de su acierto. Ante la Presidenta se inclina la cabeza, se baja la voz y se elogia el peinado.</p>
+  </details>
+
+  <section class="tarjeta">
+    <h2><span class="adorno">✦</span> Censo de socios</h2>
+    ${f === 'validado' ? `<p class="contador">${env} de 15 cartas enviadas</p>` : ''}
+    <div class="censo">${IDS.map(id => {
+      let estado = '';
+      if (f === 'validado'){
+        const c = cartaDe(id);
+        estado = c?.enviada ? `<span class="cartel ok">¡Ha cumplido! 👑👑👑</span>` : `<span class="cartel pend">Envío pendiente</span>`;
+      } else estado = S.socios[id]?.pub ? `<span class="t">✔ Censado</span>` : `<span class="cartel gris">Sin censar</span>`;
+      return `<a class="socio" href="#socio-${id}">${bola(id)}<span class="n">${esc(nom(id))}</span>${id === PRESIDENTA ? '<span class="t">Presidenta Vitalicia</span>' : ''}${estado}</a>`;
+    }).join('')}</div>
+    <p class="nota" style="text-align:center;margin-top:12px">Toca tu jersey para entrar en tu perfil.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2><span class="adorno">✦</span> Tablón de anuncios</h2>
+    ${tablon.length ? tablon.map(m => msgHTML(m, esMarta)).join('') : '<p class="vacio">Silencio institucional. La Presidencia aún no ha dicho nada.</p>'}
+  </section>
+
+  ${f === 'validado' ? vistaConsultorio() : ''}
+  ${f === 'validado' ? vistaBuzon() : ''}
+  `;
+}
+function tablonItems(){
+  const todas = todasEnviadas();
+  // Los anuncios individuales de alta y de felicitación se sustituyen por un único resumen
+  const items = mensajesPara('todos').filter(m => m.tipo !== 'registro' && !(todas && m.tipo === 'felicitacion')).map(deDoc);
+  const regs = registrados();
+  if (regs.length){
+    const faltan = IDS.filter(id => !S.socios[id]?.pub);
+    const fecha = regs.map(id => S.socios[id].alta || '').sort().at(-1) || ahoraISO();
+    items.push({fecha, clase:'solemne', ico:'🎖️', de:'Libro Registro', html: faltan.length
+      ? `Se han inscrito en AZAMAI <b>${regs.length} de 15</b> socios (${regs.map(id => esc(nom(id))).join(', ')}), y cada uno ha elegido voluntaria, democrática e irrevocablemente a <b>Doña Marta</b> como Presidenta Vitalicia. Faltan por inscribirse: <b>${faltan.map(id => esc(nom(id))).join(', ')}</b>.`
+      : `<b>¡CENSO COMPLETO!</b> Los quince socios de AZAMAI se han inscrito en el Libro Registro y han elegido, voluntaria, democrática, irrevocable y unánimemente, a <b>Doña Marta</b> como Presidenta Vitalicia. La Presidencia convocará el sorteo cuando le plazca.`});
+  }
+  if (todas) items.push({fecha:fechaPublicacion(), clase:'fiesta', ico:'👑👑👑', de:'Sus Majestades', html:'<b>¡TODOS HAN CUMPLIDO!</b> Las quince cartas han llegado a su destino. La suprema autoridad de AZAMAI y Sus Majestades, emocionados hasta las lágrimas, felicitan a la Asociación en pleno. El buzón real queda abierto para general conocimiento.'});
+  // Reproches públicos: un único aviso que señala a todos los rezagados
+  if (fase() === 'validado' && !todas){
+    const rezagados = IDS.filter(id => !cartaDe(id)?.enviada);
+    const ult = reprochesDe(rezagados[0]).at(-1);
+    if (ult){
+      const k = ult.nivel, t = TXT.reprochesPublicos[Math.min(k - 1, TXT.reprochesPublicos.length - 1)];
+      items.push({fecha:ult.fecha, clase:ult.clase, ico:ult.ico, de:'Sus Majestades · a los rezagados',
+        html:`<b>Rezagados (${rezagados.length}):</b> ${rezagados.map(id => esc(nom(id))).join(', ')}.<br>${esc(t)}<div class="nota">⏳ ${diasDesde(S.estado.fechaValidacion)} días desde que se comunicó el sorteo · aviso público nº ${k}</div>`});
+    }
+  }
+  return items.filter(m => m.fecha).sort((a, b) => b.fecha.localeCompare(a.fecha));
+}
+function vistaConsultorio(){
+  const ps = preguntasRonda().sort((a, b) => b.fecha.localeCompare(a.fecha));
+  return `<section class="tarjeta">
+    <h2><span class="adorno">✦</span> Consultorio anónimo</h2>
+    <p class="nota">Dudas de los amigos invisibles (tallas, colores, modelos…). Quien pregunta es anónimo; quien responde, no. Para preguntar a tu amigo invisible, entra en tu perfil.</p>
+    ${ps.length ? ps.map(p => `<div class="pregunta"><div class="q">🤫 Alguien pregunta a <b>${esc(nom(p.para))}</b>:</div><div>${enlazar(p.texto)}</div>
+      ${p.respuesta ? `<div class="r">💬 <b>${esc(nom(p.para))}</b> responde: ${enlazar(p.respuesta)}</div>` : `<div class="r pend">⏳ ${esc(nom(p.para))} aún no ha respondido (${Math.max(0, diasDesde(p.fecha))} días)</div>`}
+      <div class="fecha nota">${fHora(p.fecha)}</div></div>`).join('') : '<p class="vacio">Nadie tiene dudas. Sospechoso.</p>'}
+  </section>`;
+}
+function vistaBuzon(){
+  if (!todasEnviadas()){
+    const faltan = IDS.filter(id => !cartaDe(id)?.enviada);
+    return `<section class="tarjeta"><h2><span class="adorno">✦</span> Buzón real</h2>
+      <p>📮 Las cartas permanecen <b>lacradas</b> hasta que todos los socios hayan enviado la suya.</p>
+      <p>Faltan: ${faltan.map(id => `<b>${esc(nom(id))}</b>`).join(', ')}.</p></section>`;
+  }
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Buzón real</h2>
+    <p>📬 ¡Todas las cartas han llegado! Sus Majestades las hacen públicas para general conocimiento.</p>
+    ${IDS.map(id => `<details class="pregunta" id="d-carta-${id}"><summary style="cursor:pointer;font-weight:900">✉️ Carta de ${esc(nom(id))}</summary>${cartaHTML(id, cartaDe(id))}</details>`).join('')}
+  </section>`;
+}
+
+function vistaInstalar(){
+  return `<section class="tarjeta">
+    <h2><span class="adorno">✦</span> Cómo instalar AZAMAI en tu móvil</h2>
+    <p>AZAMAI no se descarga de ninguna tienda: se añade a la pantalla de inicio desde el navegador y desde entonces funciona como cualquier otra app. Es gratis y no ocupa casi nada.</p>
+    <h3>📱 En iPhone</h3>
+    <ol class="pasos">
+      <li>Abre el enlace de AZAMAI en <b>Safari</b>. Si te llegó por WhatsApp, pulsa el enlace y luego el botón <b>Compartir</b> o los tres puntos y elige <b>Abrir en Safari</b>.</li>
+      <li>Pulsa el botón <b>Compartir</b>: el cuadrado con una flecha hacia arriba (abajo en el centro, o arriba a la derecha).</li>
+      <li>Baja en el menú y pulsa <b>Añadir a pantalla de inicio</b>.</li>
+      <li>Deja el nombre «AZAMAI» y pulsa <b>Añadir</b>.</li>
+      <li>Cierra Safari y abre AZAMAI desde el nuevo icono de la estrella dorada.</li>
+    </ol>
+    <h3>🤖 En Android</h3>
+    <ol class="pasos">
+      <li>Abre el enlace de AZAMAI en <b>Chrome</b>.</li>
+      <li>Pulsa el menú de los <b>tres puntos ⋮</b> (arriba a la derecha).</li>
+      <li>Pulsa <b>Instalar aplicación</b> o <b>Añadir a pantalla de inicio</b>.</li>
+      <li>Confirma con <b>Instalar</b> o <b>Añadir</b>.</li>
+      <li>Abre AZAMAI desde el nuevo icono.</li>
+    </ol>
+    <h3>🎖️ Y después</h3>
+    <ol class="pasos">
+      <li>En la pantalla de inicio, baja hasta el <b>Censo de socios</b> y toca tu jersey.</li>
+      <li>La primera vez, crea tu <b>PIN</b> (de 4 a 8 cifras). Apúntalo en lugar seguro: con él se sella tu parte del sorteo.</li>
+      <li>Deja marcada la casilla «Recordarme en este móvil» para no tener que escribirlo cada vez.</li>
+      <li>Recibirás tu acta de incorporación. Léela con la solemnidad que merece.</li>
+    </ol>
+    <p class="nota">Las novedades (sorteo, reproches, preguntas) aparecen en tu perfil al abrir la app. Ábrela de vez en cuando: la Presidencia lo agradecerá.</p>
+    <p style="text-align:center"><a class="btn oro" href="#inicio" style="text-decoration:none;display:inline-block">Volver al inicio</a></p>
+  </section>`;
+}
+
+function vistaPerfil(id){
+  if (!socio(id)) return '<section class="tarjeta"><p>Ese socio no consta en el Libro Registro.</p></section>';
+  const cab = `<section class="perfil-cab">${bola(id, 'xl')}
+    <h2 class="titulo" style="font-size:44px">${esc(nom(id))}</h2>
+    <div class="cargo ${id === PRESIDENTA ? 'presi' : ''}">${id === PRESIDENTA ? '♛ Presidenta Vitalicia ♛' : 'Socio de número'}</div></section>`;
+  if (!S.cargado.socios) return cab + '<section class="tarjeta"><p>Consultando el Libro Registro…</p></section>';
+  if (sesion && !sesion.supervisado && sesion.id !== id) return cab + `<section class="tarjeta"><h2><span class="adorno">✦</span> Perfil ajeno</h2>
+    <p>Estás identificado como <b>${esc(nom(sesion.id))}</b>. Cada socio solo puede entrar en su propio perfil.</p>
+    <div class="fila"><a class="btn oro" style="text-decoration:none" href="#socio-${sesion.id}">Ir a mi perfil</a></div>
+    <p class="nota">¿Este móvil lo usa también ${esc(nom(id))}? Primero cierra tu perfil.</p>
+    <div class="fila"><button class="btn peq" data-a="salir">Cerrar el perfil de ${esc(nom(sesion.id))}</button></div></section>`;
+  if (!sesion || sesion.id !== id) return cab + vistaAcceso(id);
+  return cab + `<div class="fila" style="justify-content:center"><button class="btn peq oro" data-a="salir">Cerrar mi perfil</button></div>`
+    + vistaSobre() + vistaMensajes(id) + vistaMiCarta(id) + vistaPreguntasRecibidas(id) + vistaPreguntar() + vistaCartaAmigo()
+    + (id === PRESIDENTA ? vistaPresidencia() : '');
+}
+function vistaAcceso(id){
+  const reg = !!S.socios[id]?.pub;
+  if (!reg) return `<section class="tarjeta"><h2><span class="adorno">✦</span> Ingreso solemne</h2>
+    <p>Es la primera vez que <b>${esc(nom(id))}</b> entra en AZAMAI. Crea tu PIN personal, de 4 a 8 cifras. Te lo pedirá la app para abrir tu perfil.</p>
+    <p class="nota">⚠️ No lo olvides: con él se sella tu parte del sorteo. Si lo pierdes, solo la Presidenta puede restablecerlo.</p>
+    <label for="codigo">Tu código de invitación</label><input id="codigo" type="text" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="NOMBRE-XXXXXX">
+    <p class="nota">Es personal e intransferible. Te ha llegado por WhatsApp.</p>
+    <label for="pin1">Tu nuevo PIN</label><input id="pin1" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8">
+    <label for="pin2">Repítelo</label><input id="pin2" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8">
+    <label class="check"><input id="recordar" type="checkbox" checked> Recordarme en este móvil</label>
+    <div class="fila"><button class="btn oro grande" data-a="registrar" data-id="${id}">Jurar los estatutos y entrar</button></div>
+    <p class="nota">¿No eres ${esc(nom(id))}? <a href="#inicio">Vuelve al censo</a>.</p></section>`;
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Identifícate</h2>
+    <label for="pin">PIN de ${esc(nom(id))}</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="8">
+    <label class="check"><input id="recordar" type="checkbox" checked> Recordarme en este móvil</label>
+    <div class="fila"><button class="btn grande" data-a="entrar" data-id="${id}">Abrir mi perfil</button></div>
+    <p class="nota">¿Has olvidado el PIN? Suplica a la Presidenta que lo restablezca. ¿No eres ${esc(nom(id))}? <a href="#inicio">Vuelve al censo</a>.</p></section>`;
+}
+function vistaSobre(){
+  if (fase() === 'abierta') return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tu amigo invisible</h2><p>Aún no se ha celebrado el sorteo. La Presidenta lo convocará cuando estime oportuno, que será el momento oportuno.</p></section>`;
+  if (fase() === 'sorteado') return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tu amigo invisible</h2><div class="sobre"><div style="font-size:46px">✉️🔒</div><p>${TXT.sorteoPersonal}</p></div></section>`;
+  const a = amigo();
+  if (a === undefined) return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tu amigo invisible</h2><p>Abriendo el sobre lacrado…</p></section>`;
+  if (!a) return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tu amigo invisible</h2><p>No se ha podido abrir tu sobre. Pide a la Presidenta que lo vuelva a sellar desde su panel.</p></section>`;
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tu amigo invisible</h2><div class="sobre">
+    ${ui.sobre ? `<p>Debes hacer tu regalo a…</p>${bola(a, 'xl')}<div class="quien">${esc(nom(a))}</div><p class="nota">🤫 Que no se entere nadie.</p><button class="btn peq oro" data-a="sobre">Volver a cerrar el sobre</button>`
+      : `<div style="font-size:52px">✉️</div><p>La suprema autoridad ha validado el sorteo. Tu sobre está listo.</p><button class="btn grande" data-a="sobre">Abrir el sobre</button><p class="nota">Ábrelo donde nadie te vea.</p>`}
+  </div></section>`;
+}
+function feedPerfil(id){
+  const items = mensajesPara(id).map(deDoc);
+  const est = S.estado, ya = ahoraISO();
+  if (est.fechaSorteo && est.fase !== 'abierta') items.push({fecha:est.fechaSorteo, clase:'sistema', ico:'🎲', de:'Secretaría de AZAMAI', html:TXT.sorteoPersonal});
+  if (fase() === 'validado'){
+    const a = amigo();
+    if (a) items.push({fecha:est.fechaValidacion, clase:'solemne', ico:'📜', de:'La suprema autoridad', html:TXT.revelacion(nom(a))});
+    const mia = cartaDe(id);
+    if (!mia?.enviada) items.push(...reprochesDe(id));
+    // Preguntas recibidas sin responder: aviso y recordatorios cada 2 días
+    preguntasRonda().filter(p => p.para === id).forEach(p => {
+      items.push({fecha:p.fecha, clase:'presi', ico:'🤫', de:'Consultorio anónimo', html:`Tu amigo invisible te ha hecho una pregunta anónima: «${enlazar(p.texto)}». Respóndela en la sección «Preguntas que te han hecho»; tu respuesta se publicará en el inicio.`});
+      if (!p.respuesta){
+        for (let k = 1; ; k++){
+          const f = sumarDias(p.fecha, 2 * k);
+          if (f > ya || k > 60) break;
+          items.push({fecha:f, clase:'reproche', ico:'⏰', de:'Recordatorio', html:esc(TXT.recordatorios[Math.min(k - 1, TXT.recordatorios.length - 1)]())});
+        }
+      }
+    });
+    if (a){
+      const ca = cartaDe(a);
+      (ca?.ediciones || []).forEach((f, i) => items.push({fecha:f, clase:'cambio', ico:'🖋️', de:'Mensajería Real',
+        html:`Tu amigo invisible, <b>${esc(nom(a))}</b>, ha modificado su carta (versión ${i + 2}). ${todasEnviadas() ? 'Revísala abajo, no vayas a regalarle lo que ya no quiere.' : 'Podrás leerla cuando todas las cartas estén enviadas.'}`}));
+      preguntasRonda().filter(p => p.para === a && p.respuesta).forEach(p => items.push({fecha:p.fechaRespuesta, clase:'fiesta', ico:'💬', de:'Consultorio anónimo', html:`${esc(nom(a))} ha respondido a tu pregunta «${esc(p.texto)}»: <b>${enlazar(p.respuesta)}</b>`}));
+      const fp = fechaPublicacion();
+      if (fp) items.push({fecha:fp, clase:'fiesta', ico:'📬', de:'Buzón real', html:`¡Todas las cartas han llegado! Ya puedes leer la carta de <b>${esc(nom(a))}</b> más abajo.`});
+    }
+  }
+  return items.filter(m => m.fecha).sort((x, y) => y.fecha.localeCompare(x.fecha));
+}
+function vistaMensajes(id){
+  const it = feedPerfil(id);
+  // Se muestran los mensajes nuevos (al menos los 3 más recientes); los antiguos quedan plegados
+  const nuevos = ui.ultimaVisita ? it.filter(m => m.fecha > ui.ultimaVisita).length : 0;
+  const n = Math.max(3, nuevos), vis = it.slice(0, n), viejos = it.slice(n);
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tus mensajes</h2>${it.length ? vis.map(m => msgHTML(m)).join('') : '<p class="vacio">No tienes mensajes.</p>'}
+    ${viejos.length ? `<details class="pregunta" id="d-msg-antiguos"><summary style="cursor:pointer;font-weight:900">🗄️ Ver ${viejos.length} mensaje${viejos.length > 1 ? 's' : ''} anterior${viejos.length > 1 ? 'es' : ''}</summary>${viejos.map(m => msgHTML(m)).join('')}</details>` : ''}</section>`;
+}
+function editorPara(id){
+  const k = `${ronda()}_${id}`;
+  if (!ui.editor || ui.editor.k !== k){
+    let ed = null;
+    try { ed = JSON.parse(ls.get('azamai-borrador-' + k) || 'null'); } catch(e){}
+    const c = cartaDe(id);
+    ui.editor = {k, texto:ed?.texto ?? c?.texto ?? '', enlaces:ed?.enlaces ?? (c?.enlaces || [])};
+  }
+  return ui.editor;
+}
+function guardarBorrador(){ if (ui.editor) ls.set('azamai-borrador-' + ui.editor.k, JSON.stringify({texto:ui.editor.texto, enlaces:ui.editor.enlaces})); }
+function vistaMiCarta(id){
+  if (fase() !== 'validado') return '';
+  const c = cartaDe(id), ed = editorPara(id);
+  const cambios = c?.enviada && (ed.texto !== c.texto || JSON.stringify(ed.enlaces) !== JSON.stringify(c.enlaces || []));
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Tu carta al amigo invisible</h2>
+    ${c?.enviada ? `<p>✅ Carta enviada el ${fHora(c.fechaEnvio)}${c.version > 1 ? ` · versión ${c.version}` : ''}. Puedes seguir editándola: cada cambio se anunciará públicamente y se avisará a quien te regala.</p>`
+      : `<p>Escribe tus deseos a Sus Majestades. Solo texto y enlaces a webs. Tu carta quedará lacrada hasta que todos hayan enviado la suya.</p>`}
+    <label for="carta-texto">Querido amigo invisible:</label>
+    <textarea id="carta-texto" placeholder="Este año he sido muy bueno/a y me gustaría…">${esc(ed.texto)}</textarea>
+    <div class="fila"><button class="btn peq verde ${ui.dictado ? 'dictando' : ''}" data-a="dictar">${ui.dictado ? '⏹️ Parar dictado' : '🎤 Dictar'}</button>
+      <span class="nota">En iPhone, si no funciona, toca el cuadro y usa el micrófono 🎤 del teclado.</span></div>
+    <h3>🔗 Enlaces</h3>
+    ${ed.enlaces.length ? `<ul class="enlaces">${ed.enlaces.map((e, i) => `<li>🔗 <a href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">${esc(e.desc || e.url)}</a><button class="btn peq" data-a="quitar-enlace" data-i="${i}" aria-label="Quitar enlace">✕</button></li>`).join('')}</ul>` : '<p class="nota">Sin enlaces todavía.</p>'}
+    <label for="enl-url">Dirección web</label><input id="enl-url" type="url" inputmode="url" placeholder="https://…">
+    <label for="enl-desc">Qué es (opcional)</label><input id="enl-desc" type="text" placeholder="Bufanda roja, talla M">
+    <div class="fila"><button class="btn peq oro" data-a="anadir-enlace">Añadir enlace</button></div>
+    <div class="fila"><button class="btn grande ${c?.enviada ? 'verde' : ''}" data-a="enviar-carta" ${c?.enviada && !cambios ? 'disabled' : ''}>${c?.enviada ? (cambios ? '📮 Enviar la nueva versión' : 'Sin cambios pendientes') : '📮 Enviar mi carta a Sus Majestades'}</button></div>
+    ${cambios ? '<p class="nota">✏️ Tienes cambios sin enviar.</p>' : ''}
+  </section>`;
+}
+function vistaPreguntasRecibidas(id){
+  if (fase() !== 'validado') return '';
+  const ps = preguntasRonda().filter(p => p.para === id).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  if (!ps.length) return '';
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Preguntas que te han hecho</h2>
+    ${ps.map(p => `<div class="pregunta"><div class="q">🤫 Tu amigo invisible pregunta:</div><div>${enlazar(p.texto)}</div>
+      ${p.respuesta ? `<div class="r">💬 Respondiste: ${enlazar(p.respuesta)}</div>` : `<label for="resp-${p.id}">Tu respuesta (será pública)</label><textarea id="resp-${p.id}" style="min-height:80px"></textarea><div class="fila"><button class="btn peq verde" data-a="responder" data-id="${p.id}">Responder</button></div>`}
+    </div>`).join('')}</section>`;
+}
+function vistaPreguntar(){
+  if (fase() !== 'validado') return '';
+  const a = amigo();
+  if (!a) return '';
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> Pregunta anónima a ${esc(nom(a))}</h2>
+    <p>¿Dudas sobre la talla, el color o el modelo? Pregunta sin descubrirte: se publicará en el inicio como «Alguien pregunta a ${esc(nom(a))}» y le llegará un aviso para que responda.</p>
+    <label for="preg-texto">Tu pregunta</label><textarea id="preg-texto" style="min-height:80px" placeholder="¿La bufanda la quieres roja o verde?"></textarea>
+    <div class="fila"><button class="btn peq rosa" data-a="preguntar">Publicar pregunta anónima</button></div></section>`;
+}
+function vistaCartaAmigo(){
+  if (!todasEnviadas()) return '';
+  const a = amigo();
+  if (!a) return '';
+  return `<section class="tarjeta"><h2><span class="adorno">✦</span> La carta de tu amigo invisible</h2>${cartaHTML(a, cartaDe(a))}</section>`;
+}
+function vistaPresidencia(){
+  const f = fase(), faltan = IDS.filter(id => !S.socios[id]?.pub);
+  const resellar = (f !== 'abierta') ? IDS.filter(id => S.socios[id]?.pub && S.asign[`${ronda()}_${id}`]?.keyId !== S.socios[id]?.keyId) : [];
+  return `<section class="tarjeta presi"><h2><span class="adorno">♛</span> Despacho de la Presidencia</h2>
+    <p>Majestad: desde aquí gobierna usted AZAMAI. Nadie más ve este despacho.</p>
+    <h3>🎲 Sorteo</h3>
+    <p>Censo: <b>${15 - faltan.length} de 15</b> socios con PIN.${faltan.length ? ` Faltan: ${faltan.map(nom).join(', ')}. El sorteo solo puede celebrarse con todos censados, porque cada uno debe tener su llave para sellar su sobre.` : ''}</p>
+    <p>Estado: <b>${f === 'abierta' ? 'sin sorteo en curso' : f === 'sorteado' ? 'sorteo celebrado, pendiente de validar' : 'sorteo validado y comunicado'}</b></p>
+    <div class="fila">
+      <button class="btn grande" data-a="celebrar" ${faltan.length ? 'disabled' : ''}>🎲 ${f === 'abierta' ? 'Celebrar el sorteo' : 'Celebrar un sorteo nuevo'}</button>
+      ${f === 'sorteado' ? '<button class="btn grande verde" data-a="validar">✅ Sorteo válido. Comunicar resultado</button>' : ''}
+      ${f !== 'abierta' ? '<button class="btn peq oro" data-a="bajar-acta">📄 Descargar el acta en Word</button>' : ''}
+    </div>
+    ${resellar.length ? `<p>⚠️ Hay ${resellar.length} socio(s) con PIN nuevo cuyo sobre debe volver a sellarse: ${resellar.map(nom).join(', ')}.</p><button class="btn peq oro" data-a="resellar">Volver a sellar sobres</button>` : ''}
+    <h3>📢 Mensaje para todos</h3>
+    <textarea id="presi-comun" style="min-height:80px" placeholder="Por la presente se hace saber…"></textarea>
+    <div class="fila"><button class="btn peq rosa" data-a="msg-comun">Publicar en el tablón</button></div>
+    <h3>✉️ Mensaje individual</h3>
+    <select id="presi-para">${IDS.filter(id => id !== PRESIDENTA).map(id => `<option value="${id}">${esc(nom(id))}</option>`).join('')}</select>
+    <textarea id="presi-indiv" style="min-height:80px;margin-top:8px" placeholder="Estimado socio…"></textarea>
+    <div class="fila"><button class="btn peq rosa" data-a="msg-indiv">Enviar a su perfil</button></div>
+    <h3>🔑 Restablecer el PIN de un socio</h3>
+    <p class="nota">El socio tendrá que crear un PIN nuevo. Si ya hubo sorteo, después habrá que volver a sellar su sobre desde aquí.</p>
+    <select id="presi-reset">${IDS.filter(id => id !== PRESIDENTA && S.socios[id]?.pub).map(id => `<option value="${id}">${esc(nom(id))}</option>`).join('')}</select>
+    <div class="fila"><button class="btn peq oro" data-a="reset-pin">Restablecer PIN</button></div>
+  </section>`;
+}
+
+/* ---------- Panel de prueba (solo versión de prueba) ---------- */
+function vistaPanelPrueba(){
+  return `<section class="tarjeta prueba"><h2>🔧 Panel de prueba</h2>
+    <p class="nota">Solo existe en la versión de prueba. Datos: <b>${DB?.tipo === 'firebase' ? 'Firebase (compartidos)' : 'modo ensayo (solo este dispositivo)'}</b>.</p>
+    <h3>⏱️ Reloj</h3>
+    <p>Fecha simulada: <b>${fHora(ahoraISO())}</b>${desfaseDias ? ` (+${desfaseDias} días)` : ''}</p>
+    <div class="fila"><button class="btn peq azul" data-a="p-reloj" data-d="1">+1 día</button><button class="btn peq azul" data-a="p-reloj" data-d="3">+3 días</button><button class="btn peq azul" data-a="p-reloj" data-d="7">+7 días</button><button class="btn peq oro" data-a="p-reloj" data-d="0">Volver a hoy</button></div>
+    <h3>👥 Socios</h3>
+    <div class="fila"><button class="btn peq azul" data-a="p-alta">Dar de alta a los que falten (PIN ${PIN_PRUEBA})</button></div>
+    <label for="p-quien">Entrar en el perfil de… (sin PIN)</label>
+    <select id="p-quien">${IDS.map(id => `<option value="${id}">${esc(nom(id))}${id === PRESIDENTA ? ' (Presidenta)' : ''}</option>`).join('')}</select>
+    <div class="fila"><button class="btn peq azul" data-a="p-como">Entrar</button></div>
+    <h3>👁️ Ver todo</h3>
+    <div class="fila"><button class="btn peq azul" data-a="p-resultado">Resultado del sorteo</button><button class="btn peq azul" data-a="p-cartas">Todas las cartas (aunque estén lacradas)</button></div>
+    <h3>⚡ Atajos</h3>
+    <div class="fila"><button class="btn peq azul" data-a="p-cartas-auto">Enviar cartas de ejemplo de los que faltan</button></div>
+    <div class="fila"><button class="btn peq" data-a="p-borrar">🗑️ Borrar todos los datos</button></div>
+    <div class="fila"><button class="btn peq oro" data-a="cerrar-capa">Cerrar</button></div>
+  </section>`;
+}
+
+/* ---------- Pintado ---------- */
+let pintPend = false;
+function pintar(){ if (pintPend) return; pintPend = true; requestAnimationFrame(() => { pintPend = false; pintarYa(); }); }
+function pintarYa(){
+  // Conservar lo que el usuario está escribiendo
+  const guard = {}, act = document.activeElement;
+  document.querySelectorAll('#app input[id],#app textarea[id],#app select[id],#capas input[id],#capas textarea[id],#capas select[id]').forEach(el => { guard[el.id] = el.type === 'checkbox' ? el.checked : el.value; });
+  const abiertos = {}; document.querySelectorAll('details[id]').forEach(d => abiertos[d.id] = d.open);
+  const foco = act?.id, sel = act && 'selectionStart' in act ? [act.selectionStart, act.selectionEnd] : null;
+  const y = window.scrollY;
+
+  if (sesion && !sesion.supervisado && S.cargado.socios && S.socios[sesion.id]?.keyId !== sesion.keyId){ sesion = null; ls.del('azamai-sesion'); tostada('Tu PIN ha sido restablecido por la Presidencia. Crea uno nuevo.'); }
+  const ruta = location.hash.replace(/^#\/?/, '') || 'inicio';
+  const m = ruta.match(/^socio[-/]([a-z]+)/);
+  $('#app').innerHTML = m ? vistaPerfil(m[1]) : ruta === 'instalar' ? vistaInstalar() : vistaInicio();
+  $('#nav').innerHTML = `<a href="#inicio" class="${ruta === 'inicio' ? 'activo' : ''}">🏠 Inicio</a>${sesion ? `<a href="#socio-${sesion.id}" class="${m && m[1] === sesion.id ? 'activo' : ''}">🎁 ${esc(nom(sesion.id))}</a>` : ''}<a href="#instalar" class="${ruta === 'instalar' ? 'activo' : ''}">📲 Instalar</a>`;
+  $('#franja').innerHTML = MODO_PRUEBA ? `<div class="franja-prueba ${sesion?.supervisado ? 'supervisado' : ''}">VERSIÓN DE PRUEBA${DB?.tipo === 'ensayo' ? ' · MODO ENSAYO (solo este dispositivo)' : ''}${desfaseDias ? ` · RELOJ +${desfaseDias} DÍAS` : ''}${sesion?.supervisado ? ` · VIENDO COMO ${esc(nom(sesion.id).toUpperCase())}` : ''}</div>` : '';
+  let capas = '';
+  if (MODO_PRUEBA) capas += `<button class="boton-prueba" data-a="abrir-prueba" aria-label="Panel de prueba">🔧</button>`;
+  if (ui.prueba) capas += `<div class="capa" data-a="fondo-capa">${vistaPanelPrueba()}</div>`;
+  if (ui.modal) capas += `<div class="capa" data-a="fondo-capa"><section class="tarjeta"><h2>${ui.modal.titulo}</h2>${ui.modal.html}<div class="fila"><button class="btn peq oro" data-a="cerrar-capa">Cerrar</button></div></section></div>`;
+  if (ui.confirmacion) capas += `<div class="capa"><section class="tarjeta"><h2><span class="adorno">✦</span> Confirmación</h2><p>${esc(ui.confirmacion.texto)}</p><div class="fila"><button class="btn verde" data-a="conf-si">Sí, adelante</button><button class="btn oro" data-a="conf-no">Mejor no</button></div></section></div>`;
+  if (ui.ocupado) capas += `<div class="ocupado"><div><div class="giro">⭐</div><p>${esc(ui.ocupado)}</p></div></div>`;
+  $('#capas').innerHTML = capas;
+
+  for (const [k, v] of Object.entries(guard)){ const el = document.getElementById(k); if (!el) continue; if (el.type === 'checkbox') el.checked = v; else if (el.id !== 'carta-texto') el.value = v; }
+  for (const [k, v] of Object.entries(abiertos)){ const d = document.getElementById(k); if (d) d.open = v; }
+  if (foco){ const el = document.getElementById(foco); if (el){ el.focus({preventScroll:true}); if (sel && 'setSelectionRange' in el){ try { el.setSelectionRange(sel[0], sel[1]); } catch(e){} } } }
+  window.scrollTo(0, y);
+}
+
+/* ---------- Acciones ---------- */
+function confirmar(texto){
+  return new Promise(res => { ui.confirmacion = {texto, res}; pintarYa(); });
+}
+function cerrarConfirmacion(valor){ const c = ui.confirmacion; ui.confirmacion = null; if (c) c.res(valor); }
+async function ocupado(texto, fn){
+  ui.ocupado = texto; pintarYa();
+  await new Promise(r => setTimeout(r, 30));
+  try { return await fn(); }
+  catch(e){ console.error(e); tostada('⚠️ ' + (e.message || e)); }
+  finally { ui.ocupado = ''; pintar(); }
+}
+function guardarSesion(id, pin){ ls.set('azamai-sesion', JSON.stringify({id, pin})); }
+async function darDeAlta(id, pin){
+  const ya = await DB.getDoc('socios', id);
+  if (ya?.pub) throw new Error(`${nom(id)} ya tenía PIN. Si no fuiste tú, avisa a la Presidenta.`);
+  const {doc, priv} = await crearLlaves(pin);
+  await DB.setDoc('socios', id, {...doc, alta:ahoraISO()}, false);
+  const renovado = S.mensajes.some(m => m.para === id && m.tipo === 'registro');
+  if (renovado){
+    await DB.addDoc('mensajes', {para:id, tipo:'registro', ronda:null, fecha:ahoraISO(), html:'Tu nuevo PIN ha quedado registrado. La Presidencia, en su infinita magnanimidad, te concede una nueva oportunidad. No la desaproveches.'});
+  } else {
+    await DB.addDoc('mensajes', {para:id, tipo:'registro', ronda:null, fecha:ahoraISO(), html:TXT.registro(id)});
+    await DB.addDoc('mensajes', {para:'todos', tipo:'registro', ronda:null, fecha:ahoraISO(), texto:TXT.registroPublico(id)});
+  }
+  return {priv, keyId:doc.keyId};
+}
+async function enviarCarta(id, texto, enlaces){
+  const k = `${ronda()}_${id}`, c = S.cartas[k], f = ahoraISO();
+  if (!c?.enviada){
+    await DB.setDoc('cartas', k, {ronda:ronda(), socio:id, texto, enlaces, enviada:true, fechaEnvio:f, fechaUltima:f, version:1, ediciones:[]}, false);
+    await DB.addDoc('mensajes', {para:id, tipo:'felicitacion', ronda:ronda(), fecha:f, texto:TXT.felicitacionPersonal});
+    await DB.addDoc('mensajes', {para:'todos', tipo:'felicitacion', ronda:ronda(), fecha:f, texto:TXT.felicitacionPublica(id)});
+  } else {
+    const v = (c.version || 1) + 1;
+    await DB.setDoc('cartas', k, {texto, enlaces, fechaUltima:f, version:v, ediciones:[...(c.ediciones || []), f]});
+    await DB.addDoc('mensajes', {para:'todos', tipo:'cambio', ronda:ronda(), fecha:f, texto:TXT.cambiosPublicos[(v - 2) % TXT.cambiosPublicos.length](nom(id), v)});
+  }
+}
+async function celebrarSorteo(){
+  const pares = sortear();
+  const r = 'r' + Date.now().toString(36), f = ahoraISO();
+  for (const id of IDS){
+    const so = S.socios[id];
+    await DB.setDoc('asignaciones', `${r}_${id}`, {ronda:r, socio:id, keyId:so.keyId, sobre:await sellar(so.pub, pares[id])}, false);
+  }
+  await DB.setDoc('actas', r, {ronda:r, fecha:f, sobre:await sellar(S.socios[PRESIDENTA].pub, JSON.stringify({pares, fecha:f, ronda:r}))}, false);
+  if (MODO_PRUEBA) await DB.setDoc('azamai', 'prueba', {ronda:r, pares, fecha:f}, false);
+  await DB.setDoc('azamai', 'estado', {ronda:r, fase:'sorteado', fechaSorteo:f, fechaValidacion:null}, false);
+  await DB.addDoc('mensajes', {para:'todos', tipo:'sistema', ronda:r, fecha:f, texto:'🎲 ' + TXT.sorteoPublico});
+  return {pares, f, r};
+}
+async function leerActa(){
+  const a = S.actas[ronda()];
+  if (a && sesion?.priv){ try { return JSON.parse(await abrirSobre(sesion.priv, a.sobre)); } catch(e){} }
+  if (MODO_PRUEBA && S.prueba?.ronda === ronda()) return {pares:S.prueba.pares, fecha:S.prueba.fecha || S.estado.fechaSorteo, ronda:ronda()};
+  throw new Error('No se ha podido abrir el acta con esta llave.');
+}
+
+const acciones = {
+  'conf-si'(){ cerrarConfirmacion(true); },
+  'conf-no'(){ cerrarConfirmacion(false); },
+  'abrir-prueba'(){ ui.prueba = true; },
+  'cerrar-capa'(){ ui.prueba = false; ui.modal = null; },
+  'fondo-capa'(el, ev){ if (ev.target === el){ ui.prueba = false; ui.modal = null; } },
+  'sobre'(){ ui.sobre = !ui.sobre; },
+  'salir'(){ sesion = null; ls.del('azamai-sesion'); ui.sobre = false; ui.editor = null; location.hash = '#inicio'; },
+  async 'registrar'(el){
+    const id = el.dataset.id, p1 = $('#pin1').value.trim(), p2 = $('#pin2').value.trim();
+    if (!/^\d{4,8}$/.test(p1)) return tostada('El PIN debe tener entre 4 y 8 cifras.');
+    if (p1 !== p2) return tostada('Los dos PIN no coinciden. Concentración, por favor.');
+    const recordar = $('#recordar').checked, codigo = $('#codigo').value;
+    await ocupado('Inscribiendo en el Libro Registro y forjando tu llave…', async () => {
+      if (!await codigoValido(id, codigo)) throw new Error(`Ese no es el código de invitación de ${nom(id)}. Revisa el WhatsApp que te llegó.`);
+      const {priv, keyId} = await darDeAlta(id, p1);
+      sesion = {id, priv, keyId}; ui.ultimaVisita = null; ls.set('azamai-visita-' + id, ahoraISO());
+      if (recordar) guardarSesion(id, p1);
+      tostada('🎖️ ¡Ya eres de AZAMAI! Lee tu acta de incorporación.');
+    });
+  },
+  async 'entrar'(el){
+    const id = el.dataset.id, pin = $('#pin').value.trim(), recordar = $('#recordar').checked;
+    await ocupado('Comprobando credenciales ante Sus Majestades…', async () => {
+      try { sesion = {id, priv:await abrirLlave(S.socios[id].privEnc, pin), keyId:S.socios[id].keyId}; }
+      catch(e){ throw new Error('PIN incorrecto. Los camellos toman nota. 🐪'); }
+      ui.ultimaVisita = ls.get('azamai-visita-' + id); ls.set('azamai-visita-' + id, ahoraISO());
+      cacheAmigo = {}; ui.sobre = false; ui.editor = null;
+      if (recordar) guardarSesion(id, pin);
+    });
+  },
+  'dictar'(){
+    if (ui.dictado){ try { ui.dictado.stop(); } catch(e){} ui.dictado = null; return; }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return tostada('Este navegador no deja dictar desde la app. Toca el cuadro de texto y usa el micrófono 🎤 del teclado.', 6000);
+    const r = new SR(); r.lang = 'es-ES'; r.continuous = true; r.interimResults = false;
+    r.onresult = e => {
+      const t = [...e.results].slice(e.resultIndex).filter(x => x.isFinal).map(x => x[0].transcript).join(' ').trim();
+      if (!t || !ui.editor) return;
+      const ta = $('#carta-texto'); const base = ta ? ta.value : ui.editor.texto;
+      ui.editor.texto = (base + (base && !/\s$/.test(base) ? ' ' : '') + t);
+      if (ta) ta.value = ui.editor.texto;
+      guardarBorrador(); pintar();
+    };
+    r.onerror = e => { tostada('Dictado detenido: ' + e.error); ui.dictado = null; pintar(); };
+    r.onend = () => { ui.dictado = null; pintar(); };
+    try { r.start(); ui.dictado = r; tostada('🎤 Habla ahora. Sus Majestades escuchan.'); } catch(e){ tostada('No se pudo iniciar el dictado.'); }
+  },
+  'anadir-enlace'(){
+    let url = $('#enl-url').value.trim(); const desc = $('#enl-desc').value.trim();
+    if (!url) return tostada('Escribe la dirección web.');
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+    try { const u = new URL(url); if (!/^https?:$/.test(u.protocol) || !u.hostname.includes('.')) throw 0; } catch(e){ return tostada('Esa dirección no parece una web.'); }
+    ui.editor.enlaces = [...ui.editor.enlaces, {url, desc}]; guardarBorrador();
+    $('#enl-url').value = ''; $('#enl-desc').value = '';
+  },
+  'quitar-enlace'(el){ ui.editor.enlaces = ui.editor.enlaces.filter((_, i) => i !== Number(el.dataset.i)); guardarBorrador(); },
+  async 'enviar-carta'(){
+    const id = sesion.id, ed = ui.editor;
+    ed.texto = $('#carta-texto').value;
+    if (!ed.texto.trim() && !ed.enlaces.length) return tostada('Una carta vacía no la aceptan ni los camellos.');
+    const ya = cartaDe(id)?.enviada;
+    if (ya && !await confirmar('El cambio se anunciará públicamente y se avisará a quien te regala. ¿Enviar la nueva versión?')) return;
+    await ocupado('Los pajes reales recogen tu carta…', async () => {
+      await enviarCarta(id, ed.texto, ed.enlaces);
+      ls.del('azamai-borrador-' + ed.k); ui.editor = null;
+      tostada(ya ? '🖋️ Nueva versión enviada.' : '👑👑👑 ¡Carta enviada! Sus Majestades te felicitan.');
+    });
+  },
+  async 'preguntar'(){
+    const t = $('#preg-texto').value.trim(), a = amigo();
+    if (!t) return tostada('Escribe tu pregunta.');
+    if (!a) return;
+    await ocupado('Publicando de forma anónima…', async () => {
+      await DB.addDoc('preguntas', {ronda:ronda(), para:a, texto:t, fecha:ahoraISO(), respuesta:null, fechaRespuesta:null});
+      $('#preg-texto').value = '';
+      tostada('🤫 Pregunta publicada. Nadie sabrá que has sido tú.');
+    });
+  },
+  async 'responder'(el){
+    const id = el.dataset.id, t = $('#resp-' + id).value.trim();
+    if (!t) return tostada('Escribe tu respuesta.');
+    await ocupado('Publicando tu respuesta…', async () => { await DB.setDoc('preguntas', id, {respuesta:t, fechaRespuesta:ahoraISO()}); tostada('💬 Respuesta publicada en el inicio.'); });
+  },
+  async 'celebrar'(){
+    if (ronda() && !await confirmar('Ya hay un sorteo en curso. Si celebra uno nuevo, se anulan el resultado, las cartas y las preguntas actuales. ¿Procede, Majestad?')) return;
+    if (!ronda() && !await confirmar('¿Celebrar el sorteo de AZAMAI? Recibirá el resultado en un documento de Word que solo usted podrá abrir.')) return;
+    await ocupado('Agitando el bombo y sellando quince sobres…', async () => {
+      const {pares, f, r} = await celebrarSorteo();
+      ui.editor = null;
+      ui.ocupado = 'Redactando el acta en Word…'; pintarYa();
+      const ok = await guardarArchivo(nombreActa(), documentoActa(pares, f, r));
+      ui.modal = {titulo:'📜 Sorteo celebrado', html:`<p>Majestad: el sorteo se ha celebrado y cada socio tiene ya su sobre sellado.</p><p>${ok ? 'El resultado se le ha entregado en un <b>documento de Word</b>. Ábralo para verlo: es el único lugar donde consta.' : 'No se ha guardado el documento de Word.'} Si no lo encuentra, pulse «Descargar el acta en Word» en su despacho.</p><p>Si lo encuentra conforme, pulse «Sorteo válido. Comunicar resultado».</p>`};
+    });
+  },
+  async 'validar'(){
+    if (!await confirmar('¿Declara válido el sorteo? Cada socio verá en su perfil a quién debe regalar.')) return;
+    await ocupado('Comunicando el resultado a los quince socios…', async () => {
+      const f = ahoraISO();
+      await DB.setDoc('azamai', 'estado', {fase:'validado', fechaValidacion:f});
+      await DB.addDoc('mensajes', {para:'todos', tipo:'sistema', ronda:ronda(), fecha:f, texto:'✅ ' + TXT.validoPublico});
+      tostada('✅ Resultado comunicado.');
+    });
+  },
+  async 'bajar-acta'(){
+    await ocupado('Redactando el acta en Word…', async () => {
+      const {pares, fecha, ronda:r} = await leerActa();
+      const ok = await guardarArchivo(nombreActa(), documentoActa(pares, fecha, r));
+      if (ok) tostada('📄 Acta entregada. Ábrala para ver el resultado.');
+    });
+  },
+  async 'resellar'(){
+    await ocupado('Volviendo a sellar sobres…', async () => {
+      const {pares} = await leerActa();
+      for (const id of IDS){
+        const so = S.socios[id], a = S.asign[`${ronda()}_${id}`];
+        if (so?.pub && a?.keyId !== so.keyId) await DB.setDoc('asignaciones', `${ronda()}_${id}`, {ronda:ronda(), socio:id, keyId:so.keyId, sobre:await sellar(so.pub, pares[id])}, false);
+      }
+      tostada('Sobres sellados de nuevo.');
+    });
+  },
+  async 'msg-comun'(){
+    const t = $('#presi-comun').value.trim(); if (!t) return;
+    await DB.addDoc('mensajes', {para:'todos', tipo:'presidencia', ronda:null, fecha:ahoraISO(), texto:t});
+    $('#presi-comun').value = ''; tostada('📢 Publicado en el tablón.');
+  },
+  async 'msg-indiv'(){
+    const para = $('#presi-para').value, t = $('#presi-indiv').value.trim(); if (!t) return;
+    await DB.addDoc('mensajes', {para, tipo:'presidencia', ronda:null, fecha:ahoraISO(), texto:t});
+    $('#presi-indiv').value = ''; tostada(`✉️ Enviado a ${nom(para)}.`);
+  },
+  async 'reset-pin'(){
+    const id = $('#presi-reset').value; if (!id) return;
+    if (!await confirmar(`¿Restablecer el PIN de ${nom(id)}? Tendrá que crear uno nuevo.`)) return;
+    await DB.delDoc('socios', id);
+    await DB.addDoc('mensajes', {para:'todos', tipo:'presidencia', ronda:null, fecha:ahoraISO(), texto:`🔑 La Presidencia ha restablecido el PIN de ${nom(id)}, que deberá crear uno nuevo. Se le recuerda que la memoria también es una virtud navideña.`});
+    tostada(`PIN de ${nom(id)} restablecido.`);
+  },
+  async 'borrar-msg'(el){
+    if (!await confirmar('¿Borrar este mensaje del tablón?')) return;
+    await DB.delDoc('mensajes', el.dataset.id);
+  },
+  // --- Prueba ---
+  'p-reloj'(el){
+    const d = Number(el.dataset.d); desfaseDias = d === 0 ? 0 : desfaseDias + d;
+    ui.prueba = false; ls.set('azamai-desfase', String(desfaseDias)); tostada(d === 0 ? 'Reloj en la fecha real.' : `Reloj adelantado: +${desfaseDias} días.`);
+  },
+  async 'p-alta'(){
+    await ocupado('Dando de alta a los socios que faltan…', async () => {
+      const falt = IDS.filter(id => !S.socios[id]?.pub);
+      for (const id of falt){ ui.ocupado = `Dando de alta a ${nom(id)}…`; pintarYa(); await darDeAlta(id, PIN_PRUEBA); }
+      tostada(falt.length ? `${falt.length} socios dados de alta con PIN ${PIN_PRUEBA}.` : 'Ya estaban todos.');
+      ui.prueba = false;
+    });
+  },
+  'p-como'(){
+    const id = $('#p-quien').value;
+    sesion = {id, priv:null, keyId:S.socios[id]?.keyId, supervisado:true};
+    cacheAmigo = {}; ui.sobre = false; ui.editor = null; ui.prueba = false; ui.ultimaVisita = null;
+    location.hash = '#socio-' + id;
+  },
+  'p-resultado'(){
+    if (!S.prueba || S.prueba.ronda !== ronda()) return tostada('No hay sorteo en curso.');
+    ui.prueba = false;
+    ui.modal = {titulo:'👁️ Resultado del sorteo', html:`<table class="pares">${IDS.map(id => `<tr><td><b>${esc(nom(id))}</b></td><td>→</td><td>${esc(nom(S.prueba.pares[id]))}</td></tr>`).join('')}</table><p class="nota">Solo visible en la versión de prueba.</p>`};
+  },
+  'p-cartas'(){
+    const hay = enviadas();
+    ui.prueba = false;
+    ui.modal = {titulo:'👁️ Todas las cartas', html:hay.length ? hay.map(id => `<div class="pregunta">${cartaHTML(id, cartaDe(id))}</div>`).join('') : '<p class="vacio">Nadie ha enviado carta todavía.</p>'};
+  },
+  async 'p-cartas-auto'(){
+    if (fase() !== 'validado') return tostada('Primero hay que celebrar y validar el sorteo.');
+    await ocupado('Escribiendo cartas de ejemplo…', async () => {
+      const falt = IDS.filter(id => !cartaDe(id)?.enviada);
+      for (const id of falt) await enviarCarta(id, `Queridos Reyes Magos: soy ${nom(id)}. Este año he sido razonablemente bueno. Me gustaría una bufanda de cuadros, un libro de misterio y que la Presidenta me siga perdonando la vida.`, [{url:'https://es.wikipedia.org/wiki/Turr%C3%B3n', desc:'Turrón del blando'}]);
+      tostada(`${falt.length} cartas de ejemplo enviadas.`);
+      ui.prueba = false;
+    });
+  },
+  async 'p-borrar'(){
+    if (!await confirmar('¿Borrar TODOS los datos (socios, sorteo, cartas, mensajes)? No se puede deshacer.')) return;
+    await ocupado('Borrando todo…', async () => {
+      for (const id of Object.keys(S.socios)) await DB.delDoc('socios', id);
+      for (const id of Object.keys(S.asign)) await DB.delDoc('asignaciones', id);
+      for (const id of Object.keys(S.actas)) await DB.delDoc('actas', id);
+      for (const id of Object.keys(S.cartas)) await DB.delDoc('cartas', id);
+      for (const m of S.mensajes) await DB.delDoc('mensajes', m.id);
+      for (const p of S.preguntas) await DB.delDoc('preguntas', p.id);
+      await DB.delDoc('azamai', 'estado'); await DB.delDoc('azamai', 'prueba');
+      sesion = null; ls.del('azamai-sesion'); desfaseDias = 0; ls.set('azamai-desfase', '0');
+      try { Object.keys(localStorage).filter(k => k.startsWith('azamai-borrador') || k.startsWith('azamai-visita')).forEach(k => ls.del(k)); } catch(e){}
+      cacheAmigo = {}; ui.editor = null; ui.prueba = false;
+      location.hash = '#inicio';
+      tostada('Todo borrado. AZAMAI renace de sus cenizas.');
+    });
+  }
+};
+
+document.addEventListener('click', async ev => {
+  const el = ev.target.closest('[data-a]');
+  if (!el) return;
+  const fn = acciones[el.dataset.a];
+  if (!fn) return;
+  if (el.dataset.a === 'fondo-capa' && ev.target !== el) return;
+  try { await fn(el, ev); } catch(e){ console.error(e); tostada('⚠️ ' + (e.message || e)); }
+  pintar();
+});
+document.addEventListener('input', ev => {
+  if (ev.target.id === 'carta-texto' && ui.editor){ ui.editor.texto = ev.target.value; guardarBorrador(); }
+});
+document.addEventListener('change', ev => { if (ev.target.id === 'carta-texto') pintar(); });
+window.addEventListener('hashchange', () => { ui.sobre = false; window.scrollTo(0, 0); pintar(); });
+
+/* ---------- Decoración ---------- */
+(function decorar(){
+  const colores = ['#ff2b4e', '#ffcc33', '#22d36b', '#3fa9ff', '#ff3ea5', '#ffffff'];
+  $('#luces').innerHTML = Array.from({length:22}, (_, i) => `<span class="bombilla" style="color:${colores[i % colores.length]};animation-delay:${(i % 4) * 0.27}s"></span>`).join('');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  $('#nieve').innerHTML = Array.from({length:26}, () => {
+    const s = 10 + Math.random() * 16, d = 7 + Math.random() * 10;
+    return `<span class="copo" style="left:${Math.random() * 100}vw;font-size:${s}px;animation-duration:${d}s;animation-delay:-${Math.random() * d}s">${Math.random() < .2 ? '✦' : '❄'}</span>`;
+  }).join('');
+})();
+
+/* ---------- Arranque ---------- */
+(async function arrancar(){
+  pintarYa();
+  if (!window.crypto?.subtle){ $('#app').innerHTML = '<section class="tarjeta"><p>Este navegador no es compatible. Abre AZAMAI en Safari o Chrome actualizados.</p></section>'; return; }
+  try { DB = FIREBASE_CONFIG ? await almacenFirebase(FIREBASE_CONFIG) : almacenEnsayo(); }
+  catch(e){ console.error(e); $('#app').innerHTML = `<section class="tarjeta"><p>No se ha podido conectar con la base de datos: ${esc(e.message)}</p></section>`; return; }
+  let autoIntentado = false;
+  DB.watchCol('azamai', docs => {
+    const est = docs.find(d => d.id === 'estado');
+    const antes = ronda();
+    S.estado = est || {fase:'abierta'};
+    S.prueba = docs.find(d => d.id === 'prueba') || null;
+    if (antes !== ronda()){ ui.editor = null; ui.sobre = false; }
+    cacheAmigo = {}; pintar();
+  });
+  DB.watchCol('socios', async docs => {
+    S.socios = Object.fromEntries(docs.map(d => [d.id, d])); S.cargado.socios = true; cacheAmigo = {};
+    if (!autoIntentado){
+      autoIntentado = true;
+      try {
+        const g = JSON.parse(ls.get('azamai-sesion') || 'null');
+        if (g && S.socios[g.id]?.privEnc){
+          const priv = await abrirLlave(S.socios[g.id].privEnc, g.pin);
+          sesion = {id:g.id, priv, keyId:S.socios[g.id].keyId};
+          ui.ultimaVisita = ls.get('azamai-visita-' + g.id); ls.set('azamai-visita-' + g.id, ahoraISO());
+        }
+      } catch(e){ ls.del('azamai-sesion'); }
+    }
+    pintar();
+  });
+  DB.watchCol('asignaciones', docs => { S.asign = Object.fromEntries(docs.map(d => [d.id, d])); cacheAmigo = {}; pintar(); });
+  DB.watchCol('actas', docs => { S.actas = Object.fromEntries(docs.map(d => [d.id, d])); pintar(); });
+  DB.watchCol('cartas', docs => { S.cartas = Object.fromEntries(docs.map(d => [d.id, d])); pintar(); });
+  DB.watchCol('mensajes', docs => { S.mensajes = docs; pintar(); });
+  DB.watchCol('preguntas', docs => { S.preguntas = docs; pintar(); });
+})();
+</script>
+</body>
+</html>
