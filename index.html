@@ -212,11 +212,12 @@ const FIREBASE_CONFIG = {
 // 2) Versión de prueba: true = aparece el botón azul 🔧 con el que se
 //    ve todo (resultado del sorteo, cartas ocultas), se entra en
 //    cualquier perfil y se adelanta el reloj. Para la versión real: false.
-const MODO_PRUEBA = true;
+const MODO_PRUEBA = false;
 
 /* ===================================================================== */
 
 const PIN_PRUEBA = '1111';
+const VERSION = '5';
 const PRESIDENTA = 'marta';
 const SOCIOS = [
   {id:'pili', nombre:'Pili'}, {id:'tono', nombre:'Toño'}, {id:'negri', nombre:'Negri'},
@@ -450,7 +451,7 @@ function almacenEnsayo(){
     async setDoc(c, id, d, merge = true){ datos[c] = datos[c] || {}; datos[c][id] = merge ? {...(datos[c][id] || {}), ...d} : d; guardar(c); },
     async delDoc(c, id){ if (datos[c]) delete datos[c][id]; guardar(c); },
     async addDoc(c, d){ datos[c] = datos[c] || {}; datos[c]['m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)] = d; guardar(c); },
-    watchCol(c, cb){ (subs[c] = subs[c] || []).push(cb); setTimeout(() => cb(lista(c)), 0); }
+    watchCol(c, cb){ (subs[c] = subs[c] || []).push(cb); setTimeout(() => cb(lista(c)), 0); return () => { subs[c] = (subs[c] || []).filter(x => x !== cb); }; }
   };
 }
 async function almacenFirebase(cfg){
@@ -460,14 +461,15 @@ async function almacenFirebase(cfg){
   const au = await import(base + 'firebase-auth.js');
   const a = app.initializeApp(cfg);
   await au.signInAnonymously(au.getAuth(a));
-  const db = fs.getFirestore(a);
+  let db;
+  try { db = fs.initializeFirestore(a, {experimentalAutoDetectLongPolling:true}); } catch(e){ db = fs.getFirestore(a); }
   return {
     tipo:'firebase',
     async getDoc(c, id){ const s = await fs.getDoc(fs.doc(db, c, id)); return s.exists() ? s.data() : null; },
     async setDoc(c, id, d, merge = true){ await fs.setDoc(fs.doc(db, c, id), d, {merge}); },
     async delDoc(c, id){ await fs.deleteDoc(fs.doc(db, c, id)); },
     async addDoc(c, d){ await fs.addDoc(fs.collection(db, c), d); },
-    watchCol(c, cb){ fs.onSnapshot(fs.collection(db, c), snap => cb(snap.docs.map(d => ({id:d.id, ...d.data()}))), err => { console.error(err); tostada('Error de conexión: ' + err.code); }); }
+    watchCol(c, cb, alFallar){ return fs.onSnapshot(fs.collection(db, c), snap => cb(snap.docs.map(d => ({id:d.id, ...d.data()}))), err => { console.error(err); if (alFallar) alFallar(err); }); }
   };
 }
 
@@ -700,17 +702,24 @@ function tablonItems(){
       : `<b>¡CENSO COMPLETO!</b> Los quince socios de AZAMAI se han inscrito en el Libro Registro y han elegido, voluntaria, democrática, irrevocable y unánimemente, a <b>Doña Marta</b> como Presidenta Vitalicia. La Presidencia convocará el sorteo cuando le plazca.`});
   }
   if (todas) items.push({fecha:fechaPublicacion(), clase:'fiesta', ico:'👑👑👑', de:'Sus Majestades', html:'<b>¡TODOS HAN CUMPLIDO!</b> Las quince cartas han llegado a su destino. La suprema autoridad de AZAMAI y Sus Majestades, emocionados hasta las lágrimas, felicitan a la Asociación en pleno. El buzón real queda abierto para general conocimiento.'});
-  // Reproches públicos: un único aviso que señala a todos los rezagados
+  // Reproches públicos: un único aviso, siempre arriba del todo, que señala a todos los rezagados
+  let fijo = null;
   if (fase() === 'validado' && !todas){
     const rezagados = IDS.filter(id => !cartaDe(id)?.enviada);
+    const lista = `<b>Envío pendiente (${rezagados.length}):</b> ${rezagados.map(id => esc(nom(id))).join(', ')}.`;
     const ult = reprochesDe(rezagados[0]).at(-1);
+    const dias = Math.max(0, diasDesde(S.estado.fechaValidacion));
     if (ult){
       const k = ult.nivel, t = TXT.reprochesPublicos[Math.min(k - 1, TXT.reprochesPublicos.length - 1)];
-      items.push({fecha:ult.fecha, clase:ult.clase, ico:ult.ico, de:'Sus Majestades · a los rezagados',
-        html:`<b>Rezagados (${rezagados.length}):</b> ${rezagados.map(id => esc(nom(id))).join(', ')}.<br>${esc(t)}<div class="nota">⏳ ${diasDesde(S.estado.fechaValidacion)} días desde que se comunicó el sorteo · aviso público nº ${k}</div>`});
+      fijo = {fecha:ult.fecha, clase:ult.clase, ico:ult.ico, de:'Sus Majestades · a los rezagados',
+        html:`${lista}<br>${esc(t)}<div class="nota">⏳ ${dias} días desde que se comunicó el sorteo · aviso público nº ${k}</div>`};
+    } else {
+      fijo = {fecha:S.estado.fechaValidacion, clase:'reproche', ico:'📮⏰', de:'Sus Majestades · a los rezagados',
+        html:`${lista}<br>Sus Majestades aguardan, con la pluma en la mano y los camellos ensillados, las cartas de los socios arriba citados. El primer reproche público llegará en ${2 - dias === 1 ? '1 día' : '2 días'}. Quedan avisados.`};
     }
   }
-  return items.filter(m => m.fecha).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  const orden = items.filter(m => m.fecha).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  return fijo ? [fijo, ...orden] : orden;
 }
 function vistaConsultorio(){
   const ps = preguntasRonda().sort((a, b) => b.fecha.localeCompare(a.fecha));
@@ -970,8 +979,8 @@ function pintarYa(){
   const ruta = location.hash.replace(/^#\/?/, '') || 'inicio';
   const m = ruta.match(/^socio[-/]([a-z]+)/);
   $('#app').innerHTML = m ? vistaPerfil(m[1]) : ruta === 'instalar' ? vistaInstalar() : vistaInicio();
-  $('#nav').innerHTML = `<a href="#inicio" class="${ruta === 'inicio' ? 'activo' : ''}">🏠 Inicio</a>${sesion ? `<a href="#socio-${sesion.id}" class="${m && m[1] === sesion.id ? 'activo' : ''}">🎁 ${esc(nom(sesion.id))}</a>` : ''}<a href="#instalar" class="${ruta === 'instalar' ? 'activo' : ''}">📲 Instalar</a>`;
-  $('#franja').innerHTML = MODO_PRUEBA ? `<div class="franja-prueba ${sesion?.supervisado ? 'supervisado' : ''}">VERSIÓN DE PRUEBA${DB?.tipo === 'ensayo' ? ' · MODO ENSAYO (solo este dispositivo)' : ''}${desfaseDias ? ` · RELOJ +${desfaseDias} DÍAS` : ''}${sesion?.supervisado ? ` · VIENDO COMO ${esc(nom(sesion.id).toUpperCase())}` : ''}</div>` : '';
+  $('#nav').innerHTML = `<a href="#inicio" class="${ruta === 'inicio' ? 'activo' : ''}">🏠 Inicio</a>${sesion ? `<a href="#socio-${sesion.id}" class="${m && m[1] === sesion.id ? 'activo' : ''}">🎁 ${esc(nom(sesion.id))}</a>` : ''}<a href="#instalar" class="${ruta === 'instalar' ? 'activo' : ''}">📲 Instalar</a><a href="#${ruta}" data-a="actualizar" aria-label="Actualizar">🔄</a>`;
+  $('#franja').innerHTML = MODO_PRUEBA ? `<div class="franja-prueba ${sesion?.supervisado ? 'supervisado' : ''}">VERSIÓN DE PRUEBA ${VERSION}${S.sincronizado ? ` · al día ${new Date(S.sincronizado).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'})}` : ' · conectando…'}${DB?.tipo === 'ensayo' ? ' · MODO ENSAYO (solo este dispositivo)' : ''}${desfaseDias ? ` · RELOJ +${desfaseDias} DÍAS` : ''}${sesion?.supervisado ? ` · VIENDO COMO ${esc(nom(sesion.id).toUpperCase())}` : ''}</div>` : '';
   let capas = '';
   if (MODO_PRUEBA) capas += `<button class="boton-prueba" data-a="abrir-prueba" aria-label="Panel de prueba">🔧</button>`;
   if (ui.prueba) capas += `<div class="capa" data-a="fondo-capa">${vistaPanelPrueba()}</div>`;
@@ -1046,6 +1055,7 @@ async function leerActa(){
 }
 
 const acciones = {
+  'actualizar'(el, ev){ ev.preventDefault(); if (DB) window.reconectar(); tostada('🔄 Actualizando…', 1500); },
   'conf-si'(){ cerrarConfirmacion(true); },
   'conf-no'(){ cerrarConfirmacion(false); },
   'abrir-prueba'(){ ui.prueba = true; },
@@ -1277,34 +1287,56 @@ window.addEventListener('hashchange', () => { ui.sobre = false; window.scrollTo(
   try { DB = FIREBASE_CONFIG ? await almacenFirebase(FIREBASE_CONFIG) : almacenEnsayo(); }
   catch(e){ console.error(e); $('#app').innerHTML = `<section class="tarjeta"><p>No se ha podido conectar con la base de datos: ${esc(e.message)}</p></section>`; return; }
   let autoIntentado = false;
-  DB.watchCol('azamai', docs => {
-    const est = docs.find(d => d.id === 'estado');
-    const antes = ronda();
-    S.estado = est || {fase:'abierta'};
-    S.prueba = docs.find(d => d.id === 'prueba') || null;
-    if (antes !== ronda()){ ui.editor = null; ui.sobre = false; }
-    cacheAmigo = {}; pintar();
-  });
-  DB.watchCol('socios', async docs => {
-    S.socios = Object.fromEntries(docs.map(d => [d.id, d])); S.cargado.socios = true; cacheAmigo = {};
-    if (!autoIntentado){
-      autoIntentado = true;
-      try {
-        const g = JSON.parse(ls.get('azamai-sesion') || 'null');
-        if (g && S.socios[g.id]?.privEnc){
-          const priv = await abrirLlave(S.socios[g.id].privEnc, g.pin);
-          sesion = {id:g.id, priv, keyId:S.socios[g.id].keyId};
-          ui.ultimaVisita = ls.get('azamai-visita-' + g.id); ls.set('azamai-visita-' + g.id, ahoraISO());
-        }
-      } catch(e){ ls.del('azamai-sesion'); }
-    }
-    pintar();
-  });
-  DB.watchCol('asignaciones', docs => { S.asign = Object.fromEntries(docs.map(d => [d.id, d])); cacheAmigo = {}; pintar(); });
-  DB.watchCol('actas', docs => { S.actas = Object.fromEntries(docs.map(d => [d.id, d])); pintar(); });
-  DB.watchCol('cartas', docs => { S.cartas = Object.fromEntries(docs.map(d => [d.id, d])); pintar(); });
-  DB.watchCol('mensajes', docs => { S.mensajes = docs; pintar(); });
-  DB.watchCol('preguntas', docs => { S.preguntas = docs; pintar(); });
+  const OYENTES = {
+    azamai: docs => {
+      const est = docs.find(d => d.id === 'estado');
+      const antes = ronda();
+      S.estado = est || {fase:'abierta'};
+      S.prueba = docs.find(d => d.id === 'prueba') || null;
+      if (antes !== ronda()){ ui.editor = null; ui.sobre = false; }
+      cacheAmigo = {};
+    },
+    socios: async docs => {
+      S.socios = Object.fromEntries(docs.map(d => [d.id, d])); S.cargado.socios = true; cacheAmigo = {};
+      if (!autoIntentado){
+        autoIntentado = true;
+        try {
+          const g = JSON.parse(ls.get('azamai-sesion') || 'null');
+          if (g && S.socios[g.id]?.privEnc){
+            const priv = await abrirLlave(S.socios[g.id].privEnc, g.pin);
+            sesion = {id:g.id, priv, keyId:S.socios[g.id].keyId};
+            ui.ultimaVisita = ls.get('azamai-visita-' + g.id); ls.set('azamai-visita-' + g.id, ahoraISO());
+          }
+        } catch(e){ ls.del('azamai-sesion'); }
+      }
+    },
+    asignaciones: docs => { S.asign = Object.fromEntries(docs.map(d => [d.id, d])); cacheAmigo = {}; },
+    actas: docs => { S.actas = Object.fromEntries(docs.map(d => [d.id, d])); },
+    cartas: docs => { S.cartas = Object.fromEntries(docs.map(d => [d.id, d])); },
+    mensajes: docs => { S.mensajes = docs; },
+    preguntas: docs => { S.preguntas = docs; }
+  };
+  let bajas = [], reintento = null;
+  // (Re)conecta con el almacén: al abrir, al volver del segundo plano y al pulsar 🔄
+  window.reconectar = function(){
+    bajas.forEach(f => { try { f(); } catch(e){} });
+    clearTimeout(reintento);
+    bajas = Object.entries(OYENTES).map(([c, fn]) => DB.watchCol(c, async docs => {
+      await fn(docs); S.sincronizado = Date.now(); pintar();
+    }, () => { clearTimeout(reintento); reintento = setTimeout(window.reconectar, 4000); }));
+  };
+  window.reconectar();
+  let ultimoAviso = Date.now();
+  const alVolver = () => {
+    if (document.visibilityState !== 'visible') return;
+    pintar();                                   // recalcula reproches y avisos según la hora
+    if (Date.now() - ultimoAviso > 3000){ ultimoAviso = Date.now(); window.reconectar(); }
+  };
+  document.addEventListener('visibilitychange', alVolver);
+  window.addEventListener('pageshow', alVolver);
+  window.addEventListener('online', alVolver);
+  window.addEventListener('focus', alVolver);
+  setInterval(() => { if (document.visibilityState === 'visible') pintar(); }, 60000);
 })();
 </script>
 </body>
